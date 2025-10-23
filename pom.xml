@@ -60,7 +60,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.allorganized.minirpg/com.allorganized.minirpg.HelloApplication</mainClass>
+                            <mainClass>com.minirpg.minirpg/com.mini-rpg.minirpg.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
