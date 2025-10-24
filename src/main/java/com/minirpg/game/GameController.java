@@ -4,10 +4,15 @@ import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GameController {
+    @FXML
+    private ImageView gameSceneView;
+
     @FXML
     private Label storyText;
     @FXML
@@ -19,6 +24,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
+        this.setGameSceneView("castle.png");
         this.storyState = 0; // Start at the beginning;
         storyText.setText("You stand at the entrance of a big castle.");
         this.choiceButton.setText("Go inside");
@@ -31,6 +37,7 @@ public class GameController {
         switch(this.storyState) {
             case 0: // The first state
                 this.exitButton.setVisible(false);
+                this.setGameSceneView("castle-inside.png");
                 this.storyText.setText("A giant bat swoops down! What do you do?");
                 this.choiceButton.setText("Fight!");
                 storyState = 1; // Move to the next state
@@ -55,16 +62,32 @@ public class GameController {
     }
 
     @FXML protected void onExitButtonClick() {
+        this.setGameSceneView("forest.png");
         this.choiceButton.setVisible(false);
         this.exitButton.setVisible(false);
         this.storyText.setText("Coward!");
 
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(event -> {
-            Stage stage = (Stage) this.storyText.getScene().getWindow();
-            stage.close();
+            exitAndCloseWindow();
         });
 
         pause.play();
+    }
+
+    private void setGameSceneView(String imageName) {
+        String imagePath = "images/" + imageName;
+        try {
+            Image image = new Image(getClass().getResourceAsStream(imagePath));
+            this.gameSceneView.setImage(image);
+        } catch (Exception e) {
+            System.err.println("Error loading image: " + imagePath);
+            exitAndCloseWindow();
+        }
+    }
+
+    private void exitAndCloseWindow() {
+        Stage stage = (Stage) this.storyText.getScene().getWindow();
+        stage.close();
     }
 }
