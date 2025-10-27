@@ -3,6 +3,8 @@ module com.minirpg.game {
     requires javafx.fxml;
 
 
-    opens com.minirpg.game to javafx.fxml;
-    exports com.minirpg.game;
+    exports com.minirpg.game.controller;
+    opens com.minirpg.game.controller to javafx.fxml;
+    exports com.minirpg.game.main;
+    opens com.minirpg.game.main to javafx.fxml;
 }

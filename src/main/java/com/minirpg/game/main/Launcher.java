@@ -1,4 +1,4 @@
-package com.minirpg.game;
+package com.minirpg.game.main;
 
 import javafx.application.Application;
 

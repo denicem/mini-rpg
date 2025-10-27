@@ -1,4 +1,4 @@
-package com.minirpg.game;
+package com.minirpg.game.controller;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -76,7 +76,7 @@ public class GameController {
     }
 
     private void setGameSceneView(String imageName) {
-        String imagePath = "images/" + imageName;
+        String imagePath = "/com/minirpg/game/images/" + imageName;
         try {
             Image image = new Image(getClass().getResourceAsStream(imagePath));
             this.gameSceneView.setImage(image);
