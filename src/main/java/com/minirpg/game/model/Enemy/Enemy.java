@@ -3,7 +3,9 @@ package com.minirpg.game.model.Enemy;
 
 
 public class Enemy  {
+    public Enemy(){}
     protected String name;
+
 
 
     public Enemy(String name){
