@@ -6,15 +6,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<!--<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.minirpg.game.controller.GameController">-->
+<!--    <center>-->
+<!--        <StackPane prefWidth="1280" prefHeight="720">-->
+<!--            <ImageView fx:id="gameSceneView" preserveRatio="true" fitWidth="1280" fitHeight="720" />-->
+<!--            <Label fx:id="storyText" StackPane.alignment="BOTTOM_CENTER" maxWidth="900" wrapText="true"-->
+<!--               style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-padding: 15; -fx-background-radius: 20; -fx-border-radius: 20;-->
+<!--                    -fx-border-color: black; -fx-font-size: 20px; -fx-text-alignment: center; -fx-alignment: CENTER;">-->
+<!--                <font>-->
+<!--                    <Font size="20.0" />-->
+<!--                </font>-->
+<!--            </Label>-->
+<!--        </StackPane>-->
+<!--    </center>-->
+
+<!--    <bottom>-->
+<!--        <HBox alignment="CENTER" spacing="20">-->
+<!--            <padding>-->
+<!--                <Insets top="10" bottom="20" left="20" right="20" />-->
+<!--            </padding>-->
+
+<!--            <Button fx:id="choiceButton"-->
+<!--                    text="Welcome!"-->
+<!--                    onAction="#onChoiceButtonClick"/>-->
+
+<!--            <Button fx:id="exitButton"-->
+<!--                    text="Go away (Mind your own business.)"-->
+<!--                    onAction="#onExitButtonClick"/>-->
+<!--        </HBox>-->
+<!--    </bottom>-->
+<!--</BorderPane>-->
+
+
 <VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.minirpg.game.controller.GameController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <ImageView fx:id="gameSceneView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="gameSceneView" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
 
-    <Label fx:id="storyText">
+    <Label fx:id="storyText" wrapText="true" maxWidth="700.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); /* leichte Bubble */
+                -fx-padding: 15; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black; -fx-font-size: 20px; -fx-text-alignment: center; ">
       <font>
-         <Font size="18.0" />
+         <Font size="20.0" />
       </font></Label>
     <Button fx:id="choiceButton" onAction="#onChoiceButtonClick" text="Welcome!" />
     <Button fx:id="exitButton" onAction="#onExitButtonClick" text="Go away (Mind your own business.)" />
