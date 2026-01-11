@@ -1,5 +1,6 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.model.StoryManager;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,6 +22,7 @@ public class GameController {
     private Button exitButton;
 
     private int storyState = 0;
+    private StoryManager sm;
 
     @FXML
     public void initialize() {
@@ -38,12 +40,12 @@ public class GameController {
             case 0: // The first state
                 this.exitButton.setVisible(false);
                 this.setGameSceneView("castle-inside.png");
-                this.storyText.setText("A giant bat swoops down! What do you do?");
+                this.storyText.setText(sm.getStory(1));
                 this.choiceButton.setText("Fight!");
                 storyState = 1; // Move to the next state
                 break ;
             case 1: // The second state
-                this.storyText.setText("You bravely fight the bat and win! You find a small chest.");
+                this.storyText.setText(sm.getStory(2));
                 this.choiceButton.setText("Open it");
                 storyState = 2; // Move to the next state
                 break ;
