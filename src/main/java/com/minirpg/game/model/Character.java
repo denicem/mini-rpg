@@ -22,4 +22,20 @@ public abstract class Character {
     }
 
     public abstract String attack(Character target);
+
+    protected int hp = 100;
+    protected int maxHp = 100;
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = Math.min(hp, maxHp);
+    }
+
 }
