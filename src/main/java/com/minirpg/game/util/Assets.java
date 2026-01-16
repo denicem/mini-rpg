@@ -8,6 +8,7 @@ public final class Assets {
     private static final String backgrounds_path = resource_path + "backgrounds/";
     private static final String characters_path = resource_path + "characters/";
     private static final String items_path = resource_path + "items/";
+    private static final String ui_path = resource_path + "ui/";
 
     public static final String BG_CASTLE_INFRONT =
             backgrounds_path + "castle_infront.png";
@@ -26,4 +27,7 @@ public final class Assets {
 
     public static final String BG_START_SCREEN =
             backgrounds_path + "start_screen.png";
+
+    public static final String UI_START_BUTTON = ui_path + "start_button.png";
+    public static final String UI_EXIT_BUTTON = ui_path + "exit_button.png";
 }
