@@ -20,79 +20,82 @@ public class StoryManager {
         POTION_COURAGE
     }
 
-    public String getStoryText(int act) {
+    public String[] getStoryChunks(int act) {
         switch (act) {
-            case 1:
-                return "You are a young recruit of the Royal Knight Order.\n"
-                        + "To become a full-fledged knight, you must soon complete your first official trial, "
-                        + "a solo mission designed to test courage, judgment, and (ideally) zero dying.\n\n"
-                        + "You decided to train your swordsmanship and footwork in the nearby forest.\n\n"
-                        + "You walk through the woods, humming to yourself — when a distant scream cuts through the air. "
-                        + "You freeze.\n\n"
-                        + "\"That didn’t sound like a friendly squirrel.\"\n"
-                        + "\"Aaaaaaaah\"";
-            case 2:
-                return "You move toward the sound carefully.\n"
-                        + "The bushes to your right begin to rustle violently.\n"
-                        + "Before you can prepare a heroic pose, someone leaps out.\n\n";
-            case 3:
-                return "A grand castle towers above you.\n"
-                        + "A beautiful princess stands at the gate.\n\n"
-                        + "\"Oh noooo! A scary monster is inside! I need a biiig strong knight to save me!!\"\n\n"
-                        + "She smiles a little too brightly.\n"
-                        + "\"Absolutely! Totally traumatized! Let’s hurry before anything bad happens!\"";
+            case ACT_1:
+                return new String[]{
+                        "You are a young recruit of the Royal Knight Order.\n"
+                                + "To become a full-fledged knight, you must soon complete your first official trial, "
+                                + "a solo mission designed to test courage, judgment, and (ideally) zero dying.\n\n",
 
-            case 4:
-                return "You step into the castle.\n"
-                        + "The doors slam shut behind you.\n"
-                        + "Heat fills the hall.\n\n"
-                        + "From the shadows, the princess steps out, her smile widening unnaturally.\n"
-                        + "The air shimmers - and in a burst of flame, her form melts away,\n"
-                        + "revealing a massive dragon.\n\n"
-                        + "The final trial begins.";
+                        "You decided to train your swordsmanship and footwork in the nearby forest.\n\n",
 
-            default: return "";
+                        "You walk through the woods, humming to yourself — when a distant scream cuts through the air. "
+                                + "You freeze.\n\n"
+                                + "\"That didn’t sound like a friendly squirrel.\"\n"
+                                + "\"Aaaaaaaah\""
+                };
+            case ACT_2:
+                return new String[]{
+                        "You move toward the sound carefully.\n",
+                        "The bushes to your right begin to rustle violently.\n",
+                        "Before you can prepare a heroic pose, someone leaps out.\n\n"
+                };
+            case ACT_3:
+                return new String[]{
+                        "A grand castle towers above you.\n",
+                        "A beautiful princess stands at the gate.\n\n"
+                                + "\"Oh noooo! A scary monster is inside! I need a biiig strong knight to save me!!\"\n\n",
+                        "She smiles a little too brightly.\n"
+                                + "\"Absolutely! Totally traumatized! Let’s hurry before anything bad happens!\""
+                };
+
+            case ACT_4:
+                return new String[]{
+                        "You step into the castle.\n"
+                                + "The doors slam shut behind you.\n"
+                                + "Heat fills the hall.\n\n"
+                                + "From the shadows, the princess steps out, her smile widening unnaturally.\n"
+                                + "The air shimmers - and in a burst of flame, her form melts away,\n"
+                                + "revealing a massive dragon.\n\n"
+                                + "The final trial begins."
+                };
+
+            default:
+                return new String[]{getStoryText(act)};
         }
     }
+
+        public String getStoryText(int act){
+            switch (act) {
+                case ACT_1:
+                    return "ACT 1";
+                case ACT_2:
+                    return "Act 2";
+                case ACT_3:
+                    return "Act 3";
+                case ACT_4:
+                    return "Act 4";
+                case ACT_5:
+                    return "Act 5";
+                default:
+                    return "";
+            }
+        }
 
     public String getButtonText(int act, int option) {
         switch (act) {
 
-            case 1:
-                switch (option) {
-                    case 1: return "Investigate the Scream";
-                    case 2: return "Run for your life";
-                    default: return "";
-                }
-
-            case 2:
-                switch (option) {
-                    case 1: return "Fight!";
-                    case 2: return "Try to talk";
-                    case 3: return "Run for your life";
-                    default: return "";
-                }
-
-            case 3:
-                switch (option) {
-                    case 1: return "Follow the princess inside";
-                    case 2: return "Run for your life";
-                    default: return "";
-                }
-
-            case 4:
-                switch (option) {
-                    case 1: return "Continue";
-                    default: return "";
-                }
-
-            case 5:
-                switch (option) {
-                    case 1: return "Restart";
-                    case 2: return "Quit";
-                    default: return "";
-                }
-
+            case ACT_1:
+                return (option == 1) ? "Investigate the Scream" : (option == 2) ? "Run for your life" : "";
+            case ACT_2:
+                return (option == 1) ? "Fight!" : (option == 2) ? "Try to talk" : (option == 3) ? "Run for your life" : "";
+            case ACT_3:
+                return (option == 1) ? "Follow the princess inside" : (option == 2) ? "Run for your life" : "";
+            case ACT_4:
+                return (option == 1) ? "Continue" : "";
+            case ACT_5:
+                return (option == 1) ? "Restart" : (option == 2) ? "Quit" : "";
             default:
                 return "";
         }
