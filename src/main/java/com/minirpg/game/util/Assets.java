@@ -11,7 +11,7 @@ public final class Assets {
     private static final String ui_path = resource_path + "ui/";
 
     public static final String BG_CASTLE_INFRONT =
-            backgrounds_path + "castle_infront.png";
+            backgrounds_path + "front_castle.png";
 
     public static final String BG_CASTLE_INSIDE =
             backgrounds_path + "castle_inside.png";

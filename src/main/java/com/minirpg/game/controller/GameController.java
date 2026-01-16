@@ -27,29 +27,42 @@ public class GameController {
     private int storyState = 0;
     private StoryManager sm;
 
+    private String[] chunks = new String[0];
+    private int chunkIndex = 0;
+    private boolean isShowingChunks = false;
+
     @FXML
     public void initialize() {
         this.sm = new StoryManager();
+        this.storyState = 0;
         this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
         this.storyState = 0; // Start at the beginning;
         storyText.setText("You stand at the entrance of a big castle.");
         this.choiceButton.setText("Go inside");
+        this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
+//        startChunks(sm.getStoryChunks(StoryManager.ACT_1));
+//        choiceButton.setText("Weiter");
+//        exitButton.setVisible(true);
     }
 
     @FXML
     protected void onChoiceButtonClick() {
+        // If we are currently showing chunked text, advance text first
+        if (advanceChunk()) {
+            return;
+        }
         // This is a simple "state machine"
         // It checks the current state and moves to the next one.
         switch(this.storyState) {
             case 0: // The first state
                 this.exitButton.setVisible(false);
-                this.setGameSceneView(Assets.BG_CASTLE_INSIDE);
-                this.storyText.setText(sm.getStoryText(1));
-                this.choiceButton.setText("Fight!");
+                this.setGameSceneView(Assets.BG_FOREST);
+                startChunks(sm.getStoryChunks(StoryManager.ACT_1));
+                this.choiceButton.setText("Weiter!");
                 storyState = 1; // Move to the next state
                 break ;
             case 1: // The second state
-                this.storyText.setText(sm.getStoryText(2));
+                startChunks(sm.getStoryChunks(StoryManager.ACT_2));
                 this.choiceButton.setText("Open it");
                 storyState = 2; // Move to the next state
                 break ;
@@ -134,5 +147,28 @@ public class GameController {
     @FXML protected void onQuitButtonClick() {
         Stage stage = (Stage) quitButton.getScene().getWindow();
         stage.close();
+    }
+
+    private void startChunks(String[] newChunks) {
+        if (newChunks == null || newChunks.length == 0) newChunks = new String[]{""};
+
+        this.chunks = newChunks;
+        this.chunkIndex = 0;
+        this.isShowingChunks = newChunks.length > 1;
+
+        storyText.setText(chunks[0]);
+        }
+
+    private boolean advanceChunk() {
+        if (!isShowingChunks) return false;
+
+        if (chunkIndex < chunks.length - 1) {
+            chunkIndex++;
+            storyText.setText(chunks[chunkIndex]);
+            return true;
+        } else {
+            isShowingChunks = false;
+            return false;
+        }
     }
 }

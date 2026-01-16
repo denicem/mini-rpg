@@ -40,16 +40,24 @@
            prefWidth="1280" prefHeight="720">
 
 <VBox fx:id="gamePane" alignment="CENTER" spacing="20.0">
-<!--    alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" >-->
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <ImageView fx:id="gameSceneView" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />
 
-    <Label fx:id="storyText" maxWidth="700.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); /* leichte Bubble */                 -fx-padding: 15; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black; -fx-font-size: 20px; -fx-text-alignment: center; " wrapText="true">
-      <font>
-         <Font size="20.0" />
-      </font></Label>
+    <StackPane prefWidth="1280" prefHeight="720" >
+        <ImageView fx:id="gameSceneView" fitWidth="1280" fitHeight="720" preserveRatio="false" />
+
+        <Label fx:id="storyText"
+               StackPane.alignment="CENTER"
+               maxWidth="900" wrapText="true"
+               style="-fx-background-color: rgba(0,0,0,0.45); -fx-padding: 18; -fx-background-radius: 16; -fx-text-fill: white; -fx-font-size: 18px; -fx-text-alignment: center;" />
+    </StackPane>
+<!--   <ImageView fx:id="gameSceneView" fitHeight="500.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" />-->
+
+<!--    <Label fx:id="storyText" maxWidth="700.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); /* leichte Bubble */                 -fx-padding: 15; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: black; -fx-font-size: 20px; -fx-text-alignment: center; " wrapText="true">-->
+<!--      <font>-->
+<!--         <Font size="20.0" />-->
+<!--      </font></Label>-->
     <Button fx:id="choiceButton" onAction="#onChoiceButtonClick" text="Welcome!" />
     <Button fx:id="exitButton" onAction="#onExitButtonClick" text="Go away (Mind your own business.)" />
 </VBox>
