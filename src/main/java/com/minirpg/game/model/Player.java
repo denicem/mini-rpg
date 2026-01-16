@@ -1,20 +1,18 @@
 package com.minirpg.game.model;
 
-public class Player extends Character {
+import java.util.ArrayList;
+import java.util.List;
 
-    private Stats stats;
+public class Player extends Character {
+    protected List<Item> items;
 
     public Player(String name) {
-        super(name);
-        this.stats = new Stats(10, 5); // Startwerte: ATK, DEF
-    }
-
-    public Stats getStats() {
-        return stats;
+        super(name, 100, new Stats(10, 5));
+        this.items = new ArrayList<>();
     }
 
     @Override
     public String attack(Character target) {
-        return getName() + " attacks " + target.getName() + "!";
+        return BattleSystem.performAttack(this, target);
     }
 }
