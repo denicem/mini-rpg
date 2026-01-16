@@ -1,5 +1,6 @@
 package com.minirpg.game.main;
 
+import com.minirpg.game.controller.ViewManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,11 +11,17 @@ import java.io.IOException;
 public class GameApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GameApplication.class.getResource("/com/minirpg/game/view/main-menu-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 720);
+        // 1. Dem ViewManager die Haupt-Stage übergeben, damit er sie steuern kann
+        ViewManager.setStage(stage);
+
+        // 2. Den ersten Wechsel zum Hauptmenü über den Manager auslösen
+        ViewManager.switchTo("main-menu-view.fxml");
+
+        // Optionale Einstellungen für das Fenster
         stage.setTitle("The Knight Trials.");
-        stage.setScene(scene);
         stage.setResizable(false);
-        stage.show();
+        // stage.show() wird bereits im ViewManager.switchTo() aufgerufen
     }
 }
+
+
