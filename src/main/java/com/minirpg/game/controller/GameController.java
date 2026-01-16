@@ -27,7 +27,6 @@ public class GameController {
 
     @FXML
     public void initialize() {
-        this.sm = new StoryManager();
         this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
         this.storyState = 0; // Start at the beginning;
         storyText.setText("You stand at the entrance of a big castle.");
@@ -41,7 +40,7 @@ public class GameController {
         switch(this.storyState) {
             case 0: // The first state
                 this.exitButton.setVisible(false);
-                this.setGameSceneView(Assets.BG_CASTLE_INSIDE);
+                this.setGameSceneView("castle-inside.png");
                 this.storyText.setText(sm.getStoryText(1));
                 this.choiceButton.setText("Fight!");
                 storyState = 1; // Move to the next state
@@ -66,7 +65,7 @@ public class GameController {
     }
 
     @FXML protected void onExitButtonClick() {
-        this.setGameSceneView(Assets.BG_FOREST);
+        this.setGameSceneView("forest.png");
         this.choiceButton.setVisible(false);
         this.exitButton.setVisible(false);
         this.storyText.setText("Coward!");
@@ -79,7 +78,8 @@ public class GameController {
         pause.play();
     }
 
-    private void setGameSceneView(String imagePath) {
+    private void setGameSceneView(String imageName) {
+        String imagePath = "/com/minirpg/game/backgrounds/" + imageName;
         try {
             Image image = new Image(getClass().getResourceAsStream(imagePath));
             this.gameSceneView.setImage(image);
