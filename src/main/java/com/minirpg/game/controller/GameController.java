@@ -1,6 +1,7 @@
 package com.minirpg.game.controller;
 
 import com.minirpg.game.model.StoryManager;
+import com.minirpg.game.util.Assets;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,7 +27,7 @@ public class GameController {
 
     @FXML
     public void initialize() {
-        this.setGameSceneView("castle.png");
+        this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
         this.storyState = 0; // Start at the beginning;
         storyText.setText("You stand at the entrance of a big castle.");
         this.choiceButton.setText("Go inside");
@@ -40,12 +41,12 @@ public class GameController {
             case 0: // The first state
                 this.exitButton.setVisible(false);
                 this.setGameSceneView("castle-inside.png");
-                this.storyText.setText(sm.getStory(1));
+                this.storyText.setText(sm.getStoryText(1));
                 this.choiceButton.setText("Fight!");
                 storyState = 1; // Move to the next state
                 break ;
             case 1: // The second state
-                this.storyText.setText(sm.getStory(2));
+                this.storyText.setText(sm.getStoryText(2));
                 this.choiceButton.setText("Open it");
                 storyState = 2; // Move to the next state
                 break ;
@@ -78,7 +79,7 @@ public class GameController {
     }
 
     private void setGameSceneView(String imageName) {
-        String imagePath = "/com/minirpg/game/images/" + imageName;
+        String imagePath = "/com/minirpg/game/backgrounds/" + imageName;
         try {
             Image image = new Image(getClass().getResourceAsStream(imagePath));
             this.gameSceneView.setImage(image);

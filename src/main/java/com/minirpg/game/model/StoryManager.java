@@ -152,8 +152,9 @@ public class StoryManager {
                         + "\"Nobody knows where it came from. Nobody asked. Probably fine.\"";
 
             case POTION_COURAGE:
-                return intro + "You pick up: Potion of Selective Courage (+10% Escape Chance)\\n\"
+                return intro + "You pick up: Potion of Selective Courage (+10% Escape Chance)\n\n"
                         + "\"Helps you boldly run away from your problems.\"";
+
 
             default:
                 return intro + "You pick up something mysterious.";
