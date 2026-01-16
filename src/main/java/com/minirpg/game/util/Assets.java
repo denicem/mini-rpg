@@ -18,4 +18,7 @@ public final class Assets {
 
     public static String BG_AT_HOME =
             "home.png";
+
+    public static String BG_START_SCREEN =
+            "start_screen.png";
 }
