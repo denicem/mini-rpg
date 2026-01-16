@@ -1,5 +1,6 @@
-package com.minirpg.game.model;
+package com.minirpg.game.main;
 
+import com.minirpg.game.model.Player;
 import com.minirpg.game.util.Assets;
 
 public class TestLogic {
@@ -10,7 +11,6 @@ public class TestLogic {
         System.out.println(p.getName() + " is alive: " + p.isAlive());
         System.out.println(p.attack(p));
 
-        Assets assets = new Assets();
         System.out.println(Assets.BG_CASTLE_INFRONT);
     }
 }
