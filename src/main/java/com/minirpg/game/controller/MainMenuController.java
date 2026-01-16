@@ -27,7 +27,7 @@ public class MainMenuController {
 
     @FXML
     private void onStartClicked() {
-//        ViewManager.switchTo("story-view.fxml");
+        ViewManager.switchTo("story-view.fxml"); //game-view?
     }
 
     @FXML
