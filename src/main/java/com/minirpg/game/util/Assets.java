@@ -30,4 +30,8 @@ public final class Assets {
 
     public static final String UI_START_BUTTON = ui_path + "start_button.png";
     public static final String UI_EXIT_BUTTON = ui_path + "exit_button.png";
+
+    public static final String KNIGHT_SLAIN = characters_path + "knight_slain.png";
+    public static final String KNIGHT_SWORD_SHIELD = characters_path + "knight_sword_shield.png";
+    public static final String ENDING = backgrounds_path + "ending.jpg";
 }

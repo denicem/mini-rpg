@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -91,6 +93,46 @@ public class GameController {
 
     private void exitAndCloseWindow() {
         Stage stage = (Stage) this.storyText.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML private VBox gamePane;
+    @FXML private StackPane endPane;
+
+    @FXML private ImageView endBackgroundView;
+    @FXML private ImageView endKnightView;
+
+    @FXML private Label endTitleLabel;
+    @FXML private Label endSubtitleLabel;
+
+    @FXML private Button restartButton;
+    @FXML private Button quitButton;
+
+    private void showEndScreen(boolean win) {
+        gamePane.setVisible(false);
+        endPane.setVisible(true);
+
+        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.ENDING)));
+
+        if (win) {
+            endTitleLabel.setText("YOU DID IT" );
+            endSubtitleLabel.setText("CONGRATULATIONS, YOU'VE SLAIN THE DRAGON" );
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SWORD_SHIELD)));
+        } else {
+            endTitleLabel.setText("YOU DIED");
+            endSubtitleLabel.setText("THE DRAGON WINS. YOU'VE BEEN TURNED INTO A SNACK.");
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SLAIN)));
+        }
+    }
+
+    @FXML protected void onRestartButtonClick() {
+        endPane.setVisible(false);
+        gamePane.setVisible(true);
+        initialize();
+    }
+
+    @FXML protected void onQuitButtonClick() {
+        Stage stage = (Stage) quitButton.getScene().getWindow();
         stage.close();
     }
 }
