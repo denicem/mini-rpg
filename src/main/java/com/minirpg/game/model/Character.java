@@ -1,30 +1,23 @@
 package com.minirpg.game.model;
 
+import java.util.List;
+
 public abstract class Character {
     protected String name;
-    //protected Stats stats;
+    protected int hp;
+    protected int maxHp;
+    protected Stats stats;
 
-    public Character(String name) {
+    public Character(String name, int hp, Stats stats) {
         this.name = name;
-    //  this.stats = stats;
+        this.hp = hp;
+        this.maxHp = hp;
+        this.stats = stats;
     }
 
     public String getName() {
         return name;
     }
-
-    //public Stats getStats() {
-    //    return stats;
-    //}
-
-    public boolean isAlive() {
-        return true;
-    }
-
-    public abstract String attack(Character target);
-
-    protected int hp = 100;
-    protected int maxHp = 100;
 
     public int getHp() {
         return hp;
@@ -34,8 +27,18 @@ public abstract class Character {
         return maxHp;
     }
 
+    public Stats getStats() {
+        return stats;
+    }
+
     public void setHp(int hp) {
         this.hp = Math.min(hp, maxHp);
     }
+
+    public boolean isAlive() {
+        return this.hp > 0;
+    }
+
+    public abstract String attack(Character target);
 
 }
