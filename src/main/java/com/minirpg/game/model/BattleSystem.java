@@ -2,8 +2,18 @@ package com.minirpg.game.model;
 
 import java.util.Random;
 
+/**
+ * Handles combat logic between characters in the MiniRPG game.
+ * This class provides static methods to perform attacks and calculate damage.
+ */
+
 public class BattleSystem {
     private static final Random random = new Random();
+
+    /**
+     * Performs an attack from one character to another.
+     * The attack may miss, deal normal damage, or deal a critical hit if the attacker is a player.
+     */
 
     public static String performAttack(Character attacker, Character target) {
         Stats attackerStats = attacker.getStats();
