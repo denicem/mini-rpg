@@ -1,5 +1,10 @@
 package com.minirpg.game.model;
 
+/**
+ * Represents the stats of a character in the MiniRPG game.
+ * Each character has attack (atk) and defense (def) values that influence combat.
+ */
+
 public class Stats {
     private int atk;
     private int def;

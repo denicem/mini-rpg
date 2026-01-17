@@ -2,6 +2,12 @@ package com.minirpg.game.model;
 
 import java.util.List;
 
+/**
+ * Abstract base class representing a character in the MiniRPG game.
+ * A character has a name, health points, maximum health points, and stats.
+ * This class defines common behavior shared by all character types.
+ */
+
 public abstract class Character {
     protected String name;
     protected int hp;
@@ -38,6 +44,11 @@ public abstract class Character {
     public boolean isAlive() {
         return this.hp > 0;
     }
+
+    /**
+     * Performs an attack on another character.
+     * Must be implemented by subclasses.
+     */
 
     public abstract String attack(Character target);
 
