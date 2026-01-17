@@ -10,7 +10,7 @@ public class BattleSystem {
         Stats targetStats = target.getStats();
 
         if (random.nextDouble() < 0.10) {
-            return target.getName() + "ist geschickt ausgewichen! Kein Schaden.";
+            return target.getName() + "Skillfully dodged! No damage.";
         }
         int dmg = Math.max(1, attackerStats.getAtk() - targetStats.getDef());
 
@@ -22,13 +22,13 @@ public class BattleSystem {
 
         target.setHp(target.getHp() - dmg);
 
-        String msg = String.format("%s%s fügt %s %d Schaden zu.",
-                (isCrit ? "KRITISCHER TREFFER! " : ""),
+        String msg = String.format("%s%s %s %d inflicts damage .",
+                (isCrit ? "CRITICAL HIT! " : ""),
                 attacker.getName(),
                 target.getName(), dmg);
 
         if (!target.isAlive()) {
-            msg += "\n" + target.getName() + " wurde besiegt.";
+            msg += "\n" + target.getName() + " was defeated.";
         }
 
         return msg;
