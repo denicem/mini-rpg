@@ -47,6 +47,12 @@
     <StackPane prefWidth="1280" prefHeight="720" >
         <ImageView fx:id="gameSceneView" fitWidth="1280" fitHeight="720" preserveRatio="false" />
 
+        <ImageView fx:id="playerImageView" fitHeight="400.0" preserveRatio="true" StackPane.alignment="BASELINE_LEFT">
+            <StackPane.margin>
+                <Insets left="100.0" bottom="50.0" />
+            </StackPane.margin>
+        </ImageView>
+
         <Label fx:id="storyText"
                StackPane.alignment="CENTER"
                maxWidth="900" wrapText="true"
