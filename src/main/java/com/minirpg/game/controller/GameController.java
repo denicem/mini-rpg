@@ -125,16 +125,16 @@ public class GameController {
         gamePane.setVisible(false);
         endPane.setVisible(true);
 
-        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.ENDING)));
+        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.BG_ENDING)));
 
         if (win) {
             endTitleLabel.setText("YOU DID IT" );
             endSubtitleLabel.setText("CONGRATULATIONS, YOU'VE SLAIN THE DRAGON" );
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SWORD_SHIELD)));
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD)));
         } else {
             endTitleLabel.setText("YOU DIED");
             endSubtitleLabel.setText("THE DRAGON WINS. YOU'VE BEEN TURNED INTO A SNACK.");
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SLAIN)));
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_SLAIN)));
         }
     }
 
