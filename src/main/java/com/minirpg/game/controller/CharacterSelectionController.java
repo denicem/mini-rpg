@@ -25,16 +25,24 @@ public class CharacterSelectionController {
     @FXML
     private void onKnightSelected() {
         System.out.println("Knight selected!");
-        //Direkt Player Objekt erstellen?
-        //GameData.setPlayer(new Player("Sir Alistair"));
+
+        //Typ als "knight" speichern
+        GameData.setSelectedCharacterType("knight");
+        //Player Objekt erstellen
+        GameData.setPlayer(new Player("Sir Alistair"));
+        //View wechseln
         ViewManager.switchTo("game-view.fxml");
     }
 
     @FXML
     private void onKnightGirlSelected() {
         System.out.println("Knight selected!");
-        //Direkt Player erstellen?
-        //GameData.setPlayer(new Player("Lady Lala"));
+
+        //Typ als "knight_girl" speichern
+        GameData.setSelectedCharacterType("knight_girl");
+        //Player erstellen
+        GameData.setPlayer(new Player("Lady Lala"));
+        //View wechseln
         ViewManager.switchTo("game-view.fxml");
     }
 }

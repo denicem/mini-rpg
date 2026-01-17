@@ -21,7 +21,7 @@
                                     <ImageView fx:id="knightView" fitHeight="300.0" preserveRatio="true"/>
                                 </graphic>
                             </Button>
-                            <Label text="Ritter" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
+                            <Label text="Sir Alistair" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
                         </VBox>
 
                         <VBox alignment="CENTER" spacing="10.0">
@@ -30,7 +30,7 @@
                                     <ImageView fx:id="knightGirlView" fitHeight="300.0" preserveRatio="true"/>
                                 </graphic>
                             </Button>
-                            <Label text="Ritterin" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
+                            <Label text="Lady Lala" style="-fx-text-fill: white; -fx-font-size: 20px;"/>
                         </VBox>
                     </children>
                 </HBox>
