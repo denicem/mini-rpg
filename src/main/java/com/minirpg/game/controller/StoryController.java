@@ -164,8 +164,10 @@ public class StoryController {
     }
 
     private void showEnding(StoryManager.Ending ending) {
-        storyText.setText(sm.getEndingText(ending));
-        continueButton.setText("Main Menu");
-        exitButton.setVisible(false);
+        // 1. Ende in der Session speichern
+        GameSession.setFinalEnding(ending);
+
+        // 2. Zur Endscreen-View wechseln
+        ViewManager.switchTo("end-screen-view.fxml");
     }
 }

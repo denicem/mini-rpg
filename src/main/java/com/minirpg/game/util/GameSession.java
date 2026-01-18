@@ -11,6 +11,7 @@ public final class GameSession {
     private static Enemy currentEnemy;
     private static Item pendingItem;
     private static int currentAct = 0;
+    private static StoryManager.Ending finalEnding;
 
     private GameSession() {}
 
@@ -76,5 +77,12 @@ public final class GameSession {
     }
     public static void nextAct() {
         ++currentAct;
+    }
+
+    public static StoryManager.Ending getFinalEnding() {
+        return finalEnding;
+    }
+    public static void setFinalEnding(StoryManager.Ending ending) {
+        finalEnding = ending;
     }
 }
