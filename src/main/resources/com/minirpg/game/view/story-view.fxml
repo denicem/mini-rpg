@@ -14,7 +14,7 @@
                 <Label fx:id="storyText" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-fill: white; -fx-font-size: 20px; -fx-padding: 20;" text="..." wrapText="true" />
                 <HBox alignment="CENTER" spacing="40.0">
                     <children>
-                        <Button fx:id="choiceButton" onAction="#onContinueButtonClick" prefWidth="200.0" style="-fx-font-size: 18px;" text="Continue" />
+                        <Button fx:id="continueButton" onAction="#onContinueButtonClick" prefWidth="200.0" style="-fx-font-size: 18px;" text="Continue" />
                         <Button fx:id="exitButton" onAction="#onExitButtonClick" prefWidth="200.0" style="-fx-font-size: 18px;" text="Exit" />
                     </children>
                 </HBox>

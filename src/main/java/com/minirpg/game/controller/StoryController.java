@@ -1,112 +1,171 @@
 package com.minirpg.game.controller;
 
-import com.minirpg.game.model.*;
 import com.minirpg.game.util.*;
-import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class StoryController {
     @FXML private ImageView gameSceneView;
     @FXML private ImageView playerImageView;
     @FXML private Label storyText;
-    @FXML private Button choiceButton;
+    @FXML private Button continueButton;
     @FXML private Button exitButton;
 
     private StoryManager sm = new StoryManager();
-    private String[] chunks = new String[0];
+    private String[] chunks;
     private int chunkIndex = 0;
-    private boolean isShowingChunks = false;
+    private boolean isCombatPhase = false;
 
     @FXML
     public void initialize() {
-        // 1. Charakterbild laden
+        // Spielerbild laden
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
-
-        // 2. Start-Akt laden (Meistens Akt 1 nach der Auswahl)
-        updateSceneForAct(GameSession.getCurrentAct());
+        // Start mit Akt 1
+        loadAct(StoryManager.ACT_1);
     }
 
-    /**
-     * Aktualisiert Hintergrund und Text basierend auf dem Akt.
-     */
-    private void updateSceneForAct(int act) {
-        // Hintergrund setzen
-        switch (act) {
-            case 1 -> Helper.loadImage(gameSceneView, Assets.BG_CASTLE_INFRONT);
-            case 2 -> Helper.loadImage(gameSceneView, Assets.BG_FOREST);
-            case 3 -> Helper.loadImage(gameSceneView, Assets.BG_CASTLE_INFRONT); // Wieder am Schloss
-            case 4 -> Helper.loadImage(gameSceneView, Assets.BG_CASTLE_INSIDE);
-            default -> Helper.loadImage(gameSceneView, Assets.BG_FOREST);
+    private void loadAct(int act) {
+        GameSession.setCurrentAct(act);
+        this.chunks = sm.getStoryChunks(act);
+        this.chunkIndex = 0;
+        this.isCombatPhase = false;
+
+        // Hintergrund basierend auf Akt setzen
+        Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
+        displayChunk();
+    }
+
+    private void displayChunk() {
+        storyText.setText(chunks[chunkIndex]);
+        updateButtons();
+    }
+
+    private void updateButtons() {
+        int act = GameSession.getCurrentAct();
+        boolean isLastChunk = (chunkIndex == chunks.length - 1);
+
+        if (!isLastChunk) {
+            // Während man durch Chunks blättert [cite: 19, 21]
+            continueButton.setText("Continue");
+            exitButton.setVisible(false);
+        } else {
+            // Logik für den Abschluss eines Aktes laut Story.txt [cite: 18-34]
+            exitButton.setVisible(true);
+            switch (act) {
+                case StoryManager.ACT_1 -> {
+                    continueButton.setText("Continue");
+                    exitButton.setText("Flee");
+                }
+                case StoryManager.ACT_2 -> {
+                    continueButton.setText("Fight");
+                    exitButton.setText("Flee");
+                }
+                case StoryManager.ACT_3 -> { // Training Loop Entscheidung [cite: 26]
+                    continueButton.setText("Yes");
+                    exitButton.setText("No");
+                }
+                case StoryManager.ACT_4 -> {
+                    continueButton.setText("Continue");
+                    exitButton.setText("Flee");
+                }
+                case StoryManager.ACT_5 -> {
+                    continueButton.setText("Fight");
+                    exitButton.setVisible(false); // Finale: Nur Kämpfen [cite: 32]
+                }
+            }
         }
-
-        // Text-Chunks vom StoryManager holen
-        startChunks(sm.getStoryChunks(act));
-
-        // Button-Text anpassen
-        choiceButton.setText("Continue");
-        exitButton.setVisible(act == 1); // Exit nur am Anfang zeigen
     }
 
     @FXML
     protected void onContinueButtonClick() {
-        // 1. Wenn noch Text in der "Warteschlange" ist, erst diesen zeigen
-        if (advanceChunk()) return;
+        if (isCombatPhase) {
+            handleCombatResult(true); // Platzhalter für Sieg
+            return;
+        }
 
-        // 2. Wenn der Text fertig ist, entscheiden was passiert
+        if (chunkIndex < chunks.length - 1) {
+            chunkIndex++;
+            displayChunk();
+        } else {
+            handleActTransition();
+        }
+    }
+
+    private void handleActTransition() {
         int act = GameSession.getCurrentAct();
-
         switch (act) {
-            case 1 -> { // Nach Intro in den Wald
-                GameSession.setCurrentAct(2);
-                updateSceneForAct(2);
+            case StoryManager.ACT_1 -> loadAct(StoryManager.ACT_2);
+            case StoryManager.ACT_2 -> enterFakeCombat(true);
+            case StoryManager.ACT_3 -> {
+                // "Yes" gewählt -> Zurück zum Kampf [cite: 26]
+                enterFakeCombat(true);
             }
-            case 2 -> { // Im Wald erscheint der Magier
-                GameSession.setCurrentEnemy(new Mage());
-                ViewManager.switchTo("combat-view.fxml");
-            }
-            case 3 -> { // Nach Mage/Elf Sieg -> Zum Schloss
-                GameSession.setCurrentAct(4);
-                updateSceneForAct(4);
-            }
-            case 4 -> { // Im Schloss erscheint der Drache
-                GameSession.setCurrentEnemy(new Dragon());
-                ViewManager.switchTo("combat-view.fxml");
-            }
+            case StoryManager.ACT_4 -> loadAct(StoryManager.ACT_5);
+            case StoryManager.ACT_5 -> enterFakeCombat(false); // Drachenkampf [cite: 32]
         }
     }
 
     @FXML
     protected void onExitButtonClick() {
-        storyText.setText(sm.getCowardText());
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(event -> ((Stage) storyText.getScene().getWindow()).close());
-        pause.play();
-    }
-
-    // --- Hilfsmethoden für das Text-System ---
-
-    private void startChunks(String[] newChunks) {
-        this.chunks = (newChunks != null) ? newChunks : new String[]{""};
-        this.chunkIndex = 0;
-        this.isShowingChunks = chunks.length > 1;
-        storyText.setText(chunks[0]);
-    }
-
-    private boolean advanceChunk() {
-        if (!isShowingChunks) return false;
-
-        if (chunkIndex < chunks.length - 1) {
-            chunkIndex++;
-            storyText.setText(chunks[chunkIndex]);
-            return true;
-        } else {
-            isShowingChunks = false;
-            return false;
+        if (isCombatPhase) {
+            handleCombatResult(false); // Platzhalter für Niederlage
+            return;
         }
+
+        int act = GameSession.getCurrentAct();
+        if (act == StoryManager.ACT_3) {
+            // "No" gewählt -> Weiter zum Schloss [cite: 26]
+            loadAct(StoryManager.ACT_4);
+        } else {
+            // Alle anderen Flee-Optionen führen zum Coward Ending [cite: 21, 24, 28]
+            showEnding(StoryManager.Ending.COWARD);
+        }
+    }
+
+    private void enterFakeCombat(boolean randomEnemy) {
+        isCombatPhase = true;
+        String intro;
+        if (randomEnemy) {
+            // Zufälliger Gegner Intro-Text [cite: 24-26]
+            boolean isMage = Math.random() > 0.5;
+            intro = sm.getEnemyIntroText(isMage ? StoryManager.EnemyType.FOREST_MAGE : StoryManager.EnemyType.DRAMATIC_ELF);
+        } else {
+            intro = "THE FINAL TRIAL BEGINS!";
+        }
+
+        storyText.setText(intro);
+        continueButton.setText("[WIN]");
+        exitButton.setText("[LOSE]");
+        exitButton.setVisible(true);
+    }
+
+    private void handleCombatResult(boolean win) {
+        if (!win) {
+            showEnding(StoryManager.Ending.BAD);
+            return;
+        }
+
+        if (GameSession.getCurrentAct() == StoryManager.ACT_5) {
+            showEnding(StoryManager.Ending.GOOD); // [cite: 32]
+        } else {
+            // Sieg im Wald -> Loot -> Frage nach Training
+            storyText.setText(sm.getLootPickupText(StoryManager.ItemType.POTION_HP));
+            continueButton.setText("Next");
+            exitButton.setVisible(false);
+            isCombatPhase = false;
+
+            // Bereite Akt 3 (Die Frage) vor
+            GameSession.setCurrentAct(StoryManager.ACT_3);
+            this.chunks = sm.getStoryChunks(StoryManager.ACT_3);
+            this.chunkIndex = -1; // Nächster Klick zeigt ersten Chunk von Akt 3
+        }
+    }
+
+    private void showEnding(StoryManager.Ending ending) {
+        storyText.setText(sm.getEndingText(ending));
+        continueButton.setText("Main Menu");
+        exitButton.setVisible(false);
     }
 }
