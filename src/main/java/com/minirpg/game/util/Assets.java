@@ -28,10 +28,42 @@ public final class Assets {
     public static final String BG_START_SCREEN =
             backgrounds_path + "start_screen.png";
 
-    public static final String UI_START_BUTTON = ui_path + "start_button.png";
-    public static final String UI_EXIT_BUTTON = ui_path + "exit_button.png";
+    public static final String BG_ENDING =
+            backgrounds_path + "ending.jpg";
 
-    public static final String KNIGHT_SLAIN = characters_path + "knight_slain.png";
-    public static final String KNIGHT_SWORD_SHIELD = characters_path + "knight_sword_shield.png";
-    public static final String ENDING = backgrounds_path + "ending.jpg";
+    public static final String UI_START_BUTTON =
+            ui_path + "start_button.png";
+
+    public static final String UI_EXIT_BUTTON =
+            ui_path + "exit_button.png";
+
+    public static final String CH_KNIGHT_GIRL =
+            characters_path + "knight_girl.png";
+
+    public static final String CH_KNIGHT =
+            characters_path + "knight.png";
+
+    public static final String CH_KNIGHT_WITH_SWORD =
+            characters_path + "knight_sword.png";
+
+    public static final String CH_KNIGHT_WITH_SHIELD =
+            characters_path + "knight_shield.png";
+
+    public static final String CH_KNIGHT_WITH_SWORD_AND_SHIELD =
+            characters_path + "knight_sword_shield.png";
+
+    public static final String CH_KNIGHT_SLAIN =
+            characters_path + "knight_slain.png";
+
+    public static final String CH_PRINCESS =
+            characters_path + "princess.png";
+
+    public static final String CH_DRAGON =
+            characters_path + "dragon.png";
+
+    public static final String CH_MAGE =
+            characters_path + "mage.png";
+
+    public static final String CH_ELF =
+            characters_path + "elf.png";
 }
