@@ -27,6 +27,8 @@ public class MainMenuController {
 
     @FXML
     private void onStartClicked() {
+        com.minirpg.game.model.GameSession.startNewGame();
+        ViewManager.switchTo("story-view.fxml"); //game-view?
         ViewManager.switchTo("character-selection-view.fxml"); //arbeite dran!!
     }
 

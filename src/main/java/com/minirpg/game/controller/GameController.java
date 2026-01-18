@@ -1,7 +1,6 @@
 package com.minirpg.game.controller;
 
-import com.minirpg.game.model.Player;
-import com.minirpg.game.model.StoryManager;
+import com.minirpg.game.model.*;
 import com.minirpg.game.util.Assets;
 import com.minirpg.game.util.GameData;
 import javafx.animation.PauseTransition;
@@ -36,13 +35,12 @@ public class GameController {
     private int chunkIndex = 0;
     private boolean isShowingChunks = false;
 
-    private String[] chunks = new String[0];
-    private int chunkIndex = 0;
-    private boolean isShowingChunks = false;
+    private Player player;
 
     @FXML
     public void initialize() {
         this.sm = new StoryManager();
+        this.player = GameSession.getPlayer();
 
         //Characterselection
         //1. Spieler aus GameData laden
@@ -78,6 +76,60 @@ public class GameController {
         if (advanceChunk()) {
             return;
         }
+
+        Item item = GameSession.consumePendingItem();
+        if (item != null) {
+            item.use(player);
+            storyText.setText(
+                    "You used: " + item.getName() +
+                            "\nHP: " + player.getHp() + "/" + player.getMaxHp() +
+                            "\nATK: " + player.getStats().getAtk() +
+                            "\nDEF: " + player.getStats().getDef()
+            );
+            return;
+        }
+
+        Enemy enemy = GameSession.getCurrentEnemy();
+        if (enemy != null && enemy.isAlive() && player.isAlive()) {
+            String msg = BattleSystem.performAttack(player, enemy);
+            storyText.setText(msg);
+
+            if (!player.isAlive()) {
+                showEndScreen(false);
+                return;
+            }
+
+            if (!enemy.isAlive()) {
+
+                if (enemy instanceof Dragon) {
+                    GameSession.clearCurrentEnemy();
+                    showEndScreen(true);
+                    return;
+                }
+
+                Item drop;
+                if (enemy instanceof Mage) {
+                    drop = new StrengthPotion();
+                    storyState = 3;
+                } else {
+                    drop = new IronCharm();
+                    storyState = 5;
+                }
+
+                GameSession.giveItem(drop);
+                GameSession.clearCurrentEnemy();
+
+                storyText.setText(
+                        "You defeated the " + enemy.getName() + "!\n" +
+                                "You found: " + drop.getName() + "\n" +
+                                "Click to use it."
+                );
+                choiceButton.setText("Use Item");
+                return;
+            }
+            return;
+        }
+
         // This is a simple "state machine"
         // It checks the current state and moves to the next one.
         switch(this.storyState) {
@@ -94,12 +146,44 @@ public class GameController {
                 storyState = 2; // Move to the next state
                 break ;
             case 2: // The third state
-                this.storyText.setText("You found 10 Gold! Your adventure begins.");
-                this.choiceButton.setText("Restart");
-                this.exitButton.setVisible(true);
-                this.storyState = 3; // Move to the "end" state
+                if (GameSession.getCurrentEnemy() == null) {
+                    GameSession.setCurrentEnemy(new Mage());
+                    storyText.setText("A Mage appears! Prepare for battle!");
+                    this.choiceButton.setText("Attack!");
+                    return;
+                }
                 break ;
-            case 3: // The "end" state
+            case 3:
+                storyText.setText("You defeated the Mage!");
+                choiceButton.setText("Continue");
+                storyState = 4;
+                break;
+            case 4:
+                if (GameSession.getCurrentEnemy() == null) {
+                    GameSession.setCurrentEnemy(new Elf());
+                    storyText.setText("A dramatic Elf appears! Fight!");
+                    choiceButton.setText("Attack!");
+                    return;
+                }
+                break;
+            case 5:
+                startChunks(sm.getStoryChunks(StoryManager.ACT_3));
+                choiceButton.setText("Continue");
+                storyState = 6;
+                break;
+            case 6:
+                startChunks(sm.getStoryChunks(StoryManager.ACT_4));
+                choiceButton.setText("Continue");
+                storyState = 7;
+                break;
+            case 7:
+                if (GameSession.getCurrentEnemy() == null) {
+                    GameSession.setCurrentEnemy(new Dragon());
+                    storyText.setText("THE DRAGON APPEARS! Final battle!");
+                    choiceButton.setText("Attack!");
+                    return;
+                }
+                break;
             default: // A safety net
                 // Go back to the beginning
                 initialize();
