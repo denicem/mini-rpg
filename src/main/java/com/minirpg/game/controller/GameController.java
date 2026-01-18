@@ -2,7 +2,8 @@ package com.minirpg.game.controller;
 
 import com.minirpg.game.model.*;
 import com.minirpg.game.util.Assets;
-import com.minirpg.game.util.GameData;
+import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.StoryManager;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,11 +43,11 @@ public class GameController {
 
         //Characterselection
         //1. Spieler aus GameData laden
-        this.player = GameData.getPlayer();
+        this.player = GameSession.getPlayer();
 
         //2. Charakterbild setzen basierend auf der Auswahl in der CharacterSelection
-        if (GameData.getSelectedCharacterType() != null) {
-            String charType = GameData.getSelectedCharacterType();
+        if (GameSession.getSelectedCharacterType() != null) {
+            String charType = GameSession.getSelectedCharacterType();
             String imagePath = "/com/minirpg/game/characters/" + charType + ".png";
 
             try {

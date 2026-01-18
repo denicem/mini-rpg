@@ -1,9 +1,7 @@
 package com.minirpg.game.main;
 
-import com.minirpg.game.controller.ViewManager;
+import com.minirpg.game.util.ViewManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;

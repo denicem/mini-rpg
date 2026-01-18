@@ -2,7 +2,8 @@ package com.minirpg.game.controller;
 
 import com.minirpg.game.model.Player;
 import com.minirpg.game.util.Assets;
-import com.minirpg.game.util.GameData;
+import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,23 +27,17 @@ public class CharacterSelectionController {
     private void onKnightSelected() {
         System.out.println("Knight selected!");
 
-        //Typ als "knight" speichern
-        GameData.setSelectedCharacterType("knight");
-        //Player Objekt erstellen
-        GameData.setPlayer(new Player("Sir Alistair"));
-        //View wechseln
-        ViewManager.switchTo("game-view.fxml");
+        GameSession.setSelectedCharacterType("knight"); // Typ als "knight" speichern
+        GameSession.setPlayer(new Player("Sir Alistair")); // Player Objekt erstellen
+        ViewManager.switchTo("game-view.fxml"); // View wechseln
     }
 
     @FXML
     private void onKnightGirlSelected() {
-        System.out.println("Knight selected!");
+        System.out.println("Knight Girl selected!");
 
-        //Typ als "knight_girl" speichern
-        GameData.setSelectedCharacterType("knight_girl");
-        //Player erstellen
-        GameData.setPlayer(new Player("Lady Lala"));
-        //View wechseln
-        ViewManager.switchTo("game-view.fxml");
+        GameSession.setSelectedCharacterType("knight_girl"); // Typ als "knight_girl" speichern
+        GameSession.setPlayer(new Player("Lady Lala")); // Player erstellen
+        ViewManager.switchTo("game-view.fxml"); // View wechseln
     }
 }
