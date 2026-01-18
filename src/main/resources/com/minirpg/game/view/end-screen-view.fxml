@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.minirpg.game.controller.EndScreenController">
+    <children>
+        <ImageView fx:id="endBackgroundView" fitHeight="720.0" fitWidth="1280.0" />
+        <VBox alignment="CENTER" spacing="30.0" style="-fx-background-color: rgba(0,0,0,0.5);">
+            <children>
+                <Label fx:id="endTitleLabel" style="-fx-text-fill: white; -fx-font-size: 60px; -fx-font-weight: bold;" text="RESULT" />
+                <ImageView fx:id="endKnightView" fitHeight="300.0" preserveRatio="true" />
+                <Label fx:id="endSubtitleLabel" style="-fx-text-fill: white; -fx-font-size: 24px;" text="Message" />
+                <HBox alignment="CENTER" spacing="40.0">
+                    <children>
+                        <Button fx:id="restartButton" onAction="#onRestartButtonClick" prefWidth="200.0" text="Main Menu" />
+                        <Button fx:id="quitButton" onAction="#onQuitButtonClick" prefWidth="200.0" text="Quit" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

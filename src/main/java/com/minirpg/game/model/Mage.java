@@ -1,6 +1,8 @@
 package com.minirpg.game.model;
 
 
+import com.minirpg.game.util.BattleSystem;
+
 /**
  * Represents a Mage enemy in the MiniRPG game.
  * The Mage is an enemy with balanced offensive and defensive stats.

@@ -1,5 +1,7 @@
 package com.minirpg.game.model;
 
+import com.minirpg.game.util.BattleSystem;
+
 /**
  * Represents an Elf enemy in the MiniRPG game.
  * The Elf is a weaker enemy with lower health and stats.

@@ -30,7 +30,7 @@ public class CharacterSelectionController {
 
         GameSession.setSelectedCharacterType("knight"); // Typ als "knight" speichern
         GameSession.setPlayer(new Player("Sir Alistair")); // Player Objekt erstellen
-        ViewManager.switchTo("game-view.fxml"); // View wechseln
+        ViewManager.switchTo("story-view.fxml"); // View wechseln
     }
 
     @FXML
@@ -39,6 +39,6 @@ public class CharacterSelectionController {
 
         GameSession.setSelectedCharacterType("knight_girl"); // Typ als "knight_girl" speichern
         GameSession.setPlayer(new Player("Lady Lala")); // Player erstellen
-        ViewManager.switchTo("game-view.fxml"); // View wechseln
+        ViewManager.switchTo("story-view.fxml"); // View wechseln
     }
 }

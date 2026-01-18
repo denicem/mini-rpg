@@ -1,5 +1,7 @@
 package com.minirpg.game.model;
 
+import com.minirpg.game.util.BattleSystem;
+
 /**
  * Represents a Dragon enemy in the MiniRPG game.
  * The Dragon is a specific type of Enemy with predefined stats and health.

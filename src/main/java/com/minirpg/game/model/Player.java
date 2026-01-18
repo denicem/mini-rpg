@@ -1,5 +1,7 @@
 package com.minirpg.game.model;
 
+import com.minirpg.game.util.BattleSystem;
+
 import java.util.ArrayList;
 import java.util.List;
 
