@@ -1,7 +1,9 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.model.Player;
 import com.minirpg.game.model.StoryManager;
 import com.minirpg.game.util.Assets;
+import com.minirpg.game.util.GameData;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +18,8 @@ import javafx.util.Duration;
 public class GameController {
     @FXML
     private ImageView gameSceneView;
+    @FXML
+    private ImageView playerImageView;
 
     @FXML
     private Label storyText;
@@ -26,6 +30,11 @@ public class GameController {
 
     private int storyState = 0;
     private StoryManager sm;
+    private Player player;
+
+    private String[] chunks = new String[0];
+    private int chunkIndex = 0;
+    private boolean isShowingChunks = false;
 
     private String[] chunks = new String[0];
     private int chunkIndex = 0;
@@ -34,6 +43,23 @@ public class GameController {
     @FXML
     public void initialize() {
         this.sm = new StoryManager();
+
+        //Characterselection
+        //1. Spieler aus GameData laden
+        this.player = GameData.getPlayer();
+
+        //2. Charakterbild setzen basierend auf der Auswahl in der CharacterSelection
+        if (GameData.getSelectedCharacterType() != null) {
+            String charType = GameData.getSelectedCharacterType();
+            String imagePath = "/com/minirpg/game/characters/" + charType + ".png";
+
+            try {
+                playerImageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+            } catch (Exception e) {
+                System.err.println("Character could not load.");
+            }
+        }
+
         this.storyState = 0;
         this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
         this.storyState = 0; // Start at the beginning;
@@ -43,6 +69,7 @@ public class GameController {
 //        startChunks(sm.getStoryChunks(StoryManager.ACT_1));
 //        choiceButton.setText("Weiter");
 //        exitButton.setVisible(true);
+
     }
 
     @FXML
@@ -125,16 +152,16 @@ public class GameController {
         gamePane.setVisible(false);
         endPane.setVisible(true);
 
-        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.ENDING)));
+        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.BG_ENDING)));
 
         if (win) {
             endTitleLabel.setText("YOU DID IT" );
             endSubtitleLabel.setText("CONGRATULATIONS, YOU'VE SLAIN THE DRAGON" );
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SWORD_SHIELD)));
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD)));
         } else {
             endTitleLabel.setText("YOU DIED");
             endSubtitleLabel.setText("THE DRAGON WINS. YOU'VE BEEN TURNED INTO A SNACK.");
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.KNIGHT_SLAIN)));
+            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_SLAIN)));
         }
     }
 
