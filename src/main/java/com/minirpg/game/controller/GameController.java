@@ -35,8 +35,6 @@ public class GameController {
     private int chunkIndex = 0;
     private boolean isShowingChunks = false;
 
-    private Player player;
-
     @FXML
     public void initialize() {
         this.sm = new StoryManager();
