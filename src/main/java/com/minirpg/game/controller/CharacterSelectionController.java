@@ -3,6 +3,7 @@ package com.minirpg.game.controller;
 import com.minirpg.game.model.Player;
 import com.minirpg.game.util.Assets;
 import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.Helper;
 import com.minirpg.game.util.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -16,11 +17,11 @@ public class CharacterSelectionController {
     @FXML
     public void initialize() {
         // Hintergrund laden
-        backgroundImage.setImage(new Image(getClass().getResourceAsStream(Assets.BG_FOREST)));
+        Helper.loadImage(backgroundImage, Assets.BG_FOREST);
 
         // Charakter-Vorschauen laden
-        knightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT)));
-        knightGirlView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_GIRL)));
+        Helper.loadImage(knightView, Assets.CH_KNIGHT);
+        Helper.loadImage(knightGirlView, Assets.CH_KNIGHT_GIRL);
     }
 
     @FXML
