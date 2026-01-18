@@ -1,4 +1,4 @@
-package com.minirpg.game.controller;
+package com.minirpg.game.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

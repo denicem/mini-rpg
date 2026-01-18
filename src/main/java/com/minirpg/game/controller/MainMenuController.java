@@ -1,12 +1,12 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import com.minirpg.game.util.Assets;
 import javafx.stage.Stage;
-
-import java.util.Objects;
 
 public class MainMenuController {
 
@@ -27,9 +27,8 @@ public class MainMenuController {
 
     @FXML
     private void onStartClicked() {
-        com.minirpg.game.model.GameSession.startNewGame();
-        ViewManager.switchTo("story-view.fxml"); //game-view?
-//        ViewManager.switchTo("character-selection-view.fxml"); //arbeite dran!!
+        GameSession.startNewGame();
+        ViewManager.switchTo("character-selection-view.fxml");
     }
 
     @FXML

@@ -1,4 +1,4 @@
-package com.minirpg.game.model;
+package com.minirpg.game.util;
 
 public class StoryManager {
     public static final int ACT_1 = 1; //Intro + Schrei
