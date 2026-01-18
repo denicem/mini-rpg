@@ -6,6 +6,7 @@ import com.minirpg.game.model.Player;
 
 public final class GameSession {
     private static String selectedCharacterType; // Spielertyp wird hier gespeichert (Knight oder Knight_girl)
+    private static String characterImgPath;
     private static Player player;
     private static Enemy currentEnemy;
     private static Item pendingItem;
@@ -23,6 +24,14 @@ public final class GameSession {
     }
     public static void setSelectedCharacterType(String selectedCharacterType) {
         GameSession.selectedCharacterType = selectedCharacterType;
+        GameSession.setCharacterImgPath();
+    }
+
+    public static String getCharacterImgPath() {
+        return characterImgPath;
+    }
+    private static void setCharacterImgPath() {
+        GameSession.characterImgPath = "/com/minirpg/game/characters/" + GameSession.selectedCharacterType + ".png";
     }
 
     public static Player getPlayer() {

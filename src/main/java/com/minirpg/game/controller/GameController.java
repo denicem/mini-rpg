@@ -3,6 +3,7 @@ package com.minirpg.game.controller;
 import com.minirpg.game.model.*;
 import com.minirpg.game.util.Assets;
 import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.Helper;
 import com.minirpg.game.util.StoryManager;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -39,34 +40,20 @@ public class GameController {
     @FXML
     public void initialize() {
         this.sm = new StoryManager();
+
+        // Characterselection
+        // 1. Spieler aus GameData laden
         this.player = GameSession.getPlayer();
 
-        //Characterselection
-        //1. Spieler aus GameData laden
-        this.player = GameSession.getPlayer();
+        // 2. Charakterbild setzen basierend auf der Auswahl in der CharacterSelection
+        Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
 
-        //2. Charakterbild setzen basierend auf der Auswahl in der CharacterSelection
-        if (GameSession.getSelectedCharacterType() != null) {
-            String charType = GameSession.getSelectedCharacterType();
-            String imagePath = "/com/minirpg/game/characters/" + charType + ".png";
-
-            try {
-                playerImageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
-            } catch (Exception e) {
-                System.err.println("Character could not load.");
-            }
-        }
-
+        // Story-Start vorbereiten
         this.storyState = 0;
-        this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
+        Helper.loadImage(gameSceneView, Assets.BG_CASTLE_INFRONT);
         this.storyState = 0; // Start at the beginning;
         storyText.setText("You stand at the entrance of a big castle.");
         this.choiceButton.setText("Go inside");
-        this.setGameSceneView(Assets.BG_CASTLE_INFRONT);
-//        startChunks(sm.getStoryChunks(StoryManager.ACT_1));
-//        choiceButton.setText("Weiter");
-//        exitButton.setVisible(true);
-
     }
 
     @FXML
@@ -134,7 +121,7 @@ public class GameController {
         switch(this.storyState) {
             case 0: // The first state
                 this.exitButton.setVisible(false);
-                this.setGameSceneView(Assets.BG_FOREST);
+                Helper.loadImage(gameSceneView, Assets.BG_FOREST);
                 startChunks(sm.getStoryChunks(StoryManager.ACT_1));
                 this.choiceButton.setText("Weiter!");
                 storyState = 1; // Move to the next state
@@ -191,7 +178,7 @@ public class GameController {
     }
 
     @FXML protected void onExitButtonClick() {
-        this.setGameSceneView(Assets.BG_FOREST);
+        Helper.loadImage(gameSceneView, Assets.BG_FOREST);
         this.choiceButton.setVisible(false);
         this.exitButton.setVisible(false);
         this.storyText.setText("Coward!");
@@ -235,16 +222,16 @@ public class GameController {
         gamePane.setVisible(false);
         endPane.setVisible(true);
 
-        endBackgroundView.setImage(new Image(getClass().getResourceAsStream(Assets.BG_ENDING)));
+        Helper.loadImage(endBackgroundView, Assets.BG_ENDING);
 
         if (win) {
             endTitleLabel.setText("YOU DID IT" );
             endSubtitleLabel.setText("CONGRATULATIONS, YOU'VE SLAIN THE DRAGON" );
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD)));
+            Helper.loadImage(endKnightView, Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD);
         } else {
             endTitleLabel.setText("YOU DIED");
             endSubtitleLabel.setText("THE DRAGON WINS. YOU'VE BEEN TURNED INTO A SNACK.");
-            endKnightView.setImage(new Image(getClass().getResourceAsStream(Assets.CH_KNIGHT_SLAIN)));
+            Helper.loadImage(endKnightView, Assets.CH_KNIGHT_SLAIN);
         }
     }
 
