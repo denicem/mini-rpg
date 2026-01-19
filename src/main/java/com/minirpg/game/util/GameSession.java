@@ -10,6 +10,8 @@ public final class GameSession {
     private static Player player;
     private static Enemy currentEnemy;
     private static Item pendingItem;
+    private static int currentAct = 0;
+    private static StoryManager.Ending finalEnding;
 
     private GameSession() {}
 
@@ -17,6 +19,7 @@ public final class GameSession {
         player = new Player("Knight");
         currentEnemy = null;
         pendingItem = null;
+        currentAct = 1;
     }
 
     public static String getSelectedCharacterType() {
@@ -64,5 +67,22 @@ public final class GameSession {
     }
     public static void clearPendingItem() {
         pendingItem = null;
+    }
+
+    public static int getCurrentAct() {
+        return currentAct;
+    }
+    public static void setCurrentAct(int currentAct) {
+        GameSession.currentAct = currentAct;
+    }
+    public static void nextAct() {
+        ++currentAct;
+    }
+
+    public static StoryManager.Ending getFinalEnding() {
+        return finalEnding;
+    }
+    public static void setFinalEnding(StoryManager.Ending ending) {
+        finalEnding = ending;
     }
 }

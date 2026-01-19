@@ -1,4 +1,8 @@
-package com.minirpg.game.model;
+package com.minirpg.game.util;
+
+import com.minirpg.game.model.Character;
+import com.minirpg.game.model.Player;
+import com.minirpg.game.model.Stats;
 
 import java.util.Random;
 
@@ -15,7 +19,7 @@ public class BattleSystem {
      * The attack may miss, deal normal damage, or deal a critical hit if the attacker is a player.
      */
 
-    public static String performAttack(Character attacker, Character target) {
+    public static String performAttack(com.minirpg.game.model.Character attacker, Character target) {
         Stats attackerStats = attacker.getStats();
         Stats targetStats = target.getStats();
 

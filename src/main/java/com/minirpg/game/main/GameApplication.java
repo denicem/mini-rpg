@@ -21,5 +21,3 @@ public class GameApplication extends Application {
         // stage.show() wird bereits im ViewManager.switchTo() aufgerufen
     }
 }
-
-
