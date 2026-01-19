@@ -20,9 +20,6 @@ public class StoryController {
     private StoryManager sm = new StoryManager();
     private String[] chunks;
     private int chunkIndex = 0;
-    private boolean isCombatPhase = false;
-
-    private int forestCombatStage = 0;
 
     @FXML
     public void initialize() {
@@ -37,7 +34,6 @@ public class StoryController {
         GameSession.setCurrentAct(act);
         this.chunks = sm.getStoryChunks(act);
         this.chunkIndex = 0;
-        this.isCombatPhase = false;
 
         // Hintergrund basierend auf Akt setzen
         Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
@@ -87,11 +83,6 @@ public class StoryController {
 
     @FXML
     protected void onContinueButtonClick() {
-        if (isCombatPhase) {
-            handleCombatResult(true); // Platzhalter für Sieg
-            return;
-        }
-
         if (chunkIndex < chunks.length - 1) {
             chunkIndex++;
             displayChunk();
@@ -114,17 +105,15 @@ public class StoryController {
                 ViewManager.switchTo("combat-view.fxml");
             }
             case StoryManager.ACT_4 -> loadAct(StoryManager.ACT_5);
-            case StoryManager.ACT_5 -> enterFakeCombat(false); // Drachenkampf
+            case StoryManager.ACT_5 -> {
+                GameSession.setCurrentEnemy(new Dragon());
+                ViewManager.switchTo("combat-view.fxml");
+            }
         }
     }
 
     @FXML
     protected void onExitButtonClick() {
-        if (isCombatPhase) {
-            handleCombatResult(false); // Platzhalter für Niederlage
-            return;
-        }
-
         int act = GameSession.getCurrentAct();
         if (act == StoryManager.ACT_3) {
             // "No" gewählt -> Weiter zum Schloss
@@ -132,45 +121,6 @@ public class StoryController {
         } else {
             // Alle anderen Flee-Optionen führen zum Coward Ending
             showEnding(StoryManager.Ending.COWARD);
-        }
-    }
-
-    private void enterFakeCombat(boolean randomEnemy) {
-        isCombatPhase = true;
-        String intro;
-        if (randomEnemy) {
-            // Zufälliger Gegner Intro-Text
-            boolean isMage = Math.random() > 0.5;
-            intro = sm.getEnemyIntroText(isMage ? StoryManager.EnemyType.FOREST_MAGE : StoryManager.EnemyType.DRAMATIC_ELF);
-        } else {
-            intro = "THE FINAL TRIAL BEGINS!";
-        }
-
-        storyText.setText(intro);
-        continueButton.setText("[WIN]");
-        exitButton.setText("[LOSE]");
-        exitButton.setVisible(true);
-    }
-
-    private void handleCombatResult(boolean win) {
-        if (!win) {
-            showEnding(StoryManager.Ending.BAD);
-            return;
-        }
-
-        if (GameSession.getCurrentAct() == StoryManager.ACT_5) {
-            showEnding(StoryManager.Ending.GOOD); //
-        } else {
-            // Sieg im Wald -> Loot -> Frage nach Training
-            storyText.setText(sm.getLootPickupText(StoryManager.ItemType.POTION_HP));
-            continueButton.setText("Next");
-            exitButton.setVisible(false);
-            isCombatPhase = false;
-
-            // Bereite Akt 3 (Die Frage) vor
-            GameSession.setCurrentAct(StoryManager.ACT_3);
-            this.chunks = sm.getStoryChunks(StoryManager.ACT_3);
-            this.chunkIndex = -1; // Nächster Klick zeigt ersten Chunk von Akt 3
         }
     }
 
