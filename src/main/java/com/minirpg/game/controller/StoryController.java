@@ -1,5 +1,8 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.model.Elf;
+import com.minirpg.game.model.Enemy;
+import com.minirpg.game.model.Mage;
 import com.minirpg.game.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -97,13 +100,17 @@ public class StoryController {
         int act = GameSession.getCurrentAct();
         switch (act) {
             case StoryManager.ACT_1 -> loadAct(StoryManager.ACT_2);
-            case StoryManager.ACT_2 -> enterFakeCombat(true);
+            case StoryManager.ACT_2 -> {
+                GameSession.setCurrentEnemy(new Mage());
+                ViewManager.switchTo("combat-view.fxml");
+            }
             case StoryManager.ACT_3 -> {
-                // "Yes" gewählt -> Zurück zum Kampf [cite: 26]
-                enterFakeCombat(true);
+                Enemy enemy = (Math.random() > 0.5 ? new Mage() : new Elf());
+                GameSession.setCurrentEnemy(enemy);
+                ViewManager.switchTo("combat-view.fxml");
             }
             case StoryManager.ACT_4 -> loadAct(StoryManager.ACT_5);
-            case StoryManager.ACT_5 -> enterFakeCombat(false); // Drachenkampf [cite: 32]
+            case StoryManager.ACT_5 -> enterFakeCombat(false); // Drachenkampf
         }
     }
 
@@ -116,10 +123,10 @@ public class StoryController {
 
         int act = GameSession.getCurrentAct();
         if (act == StoryManager.ACT_3) {
-            // "No" gewählt -> Weiter zum Schloss [cite: 26]
+            // "No" gewählt -> Weiter zum Schloss
             loadAct(StoryManager.ACT_4);
         } else {
-            // Alle anderen Flee-Optionen führen zum Coward Ending [cite: 21, 24, 28]
+            // Alle anderen Flee-Optionen führen zum Coward Ending
             showEnding(StoryManager.Ending.COWARD);
         }
     }
@@ -128,7 +135,7 @@ public class StoryController {
         isCombatPhase = true;
         String intro;
         if (randomEnemy) {
-            // Zufälliger Gegner Intro-Text [cite: 24-26]
+            // Zufälliger Gegner Intro-Text
             boolean isMage = Math.random() > 0.5;
             intro = sm.getEnemyIntroText(isMage ? StoryManager.EnemyType.FOREST_MAGE : StoryManager.EnemyType.DRAMATIC_ELF);
         } else {
@@ -148,7 +155,7 @@ public class StoryController {
         }
 
         if (GameSession.getCurrentAct() == StoryManager.ACT_5) {
-            showEnding(StoryManager.Ending.GOOD); // [cite: 32]
+            showEnding(StoryManager.Ending.GOOD); //
         } else {
             // Sieg im Wald -> Loot -> Frage nach Training
             storyText.setText(sm.getLootPickupText(StoryManager.ItemType.POTION_HP));
