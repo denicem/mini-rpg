@@ -50,11 +50,24 @@ public class CombatController {
 
     @FXML
     private void onAttackButtonClick() {
-        // Kampf-Logik ausführen
-        String result = BattleSystem.performAttack(player, enemy);
-        combatLog.setText(result);
+        StringBuilder turnLog = new StringBuilder();
+
+        // 1. Spieler greift an
+        String playerAttackResult = BattleSystem.performAttack(player, enemy);
+        turnLog.append(playerAttackResult).append("\n");
+
+        // 2. Prüfen, ob der Gegner noch lebt
+        if (enemy.isAlive()) {
+            // 3. Gegner schlägt zurück!
+            String enemyAttackResult = BattleSystem.performAttack(enemy, player);
+            turnLog.append(enemyAttackResult);
+        }
+
+        // UI aktualisieren
+        combatLog.setText(turnLog.toString());
         updateHpDisplay();
 
+        // 4. Prüfen, ob jemand besiegt wurde
         checkBattleStatus();
     }
 
