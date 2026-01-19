@@ -19,6 +19,8 @@ public class CombatController {
     private Player player;
     private Enemy enemy;
 
+    private StoryManager sm = new StoryManager();
+
     @FXML
     public void initialize() {
         this.player = GameSession.getPlayer();
@@ -82,12 +84,21 @@ public class CombatController {
 
     private void handleVictory() {
         if (enemy instanceof Dragon) {
-            GameSession.setFinalEnding(StoryManager.Ending.GOOD); //
+            GameSession.setFinalEnding(StoryManager.Ending.GOOD);
             ViewManager.switchTo("end-screen-view.fxml");
         } else {
-            // Nach normalem Sieg: Zurück zum StoryController für Loot & Training-Frage
-            GameSession.setCurrentAct(StoryManager.ACT_3);
-            ViewManager.switchTo("story-view.fxml");
+            // 1. Loot-Nachricht aus dem StoryManager holen
+            // Fürs Erste nehmen wir eine Potion als Beispiel-Loot
+            String lootMessage = sm.getLootPickupText(StoryManager.ItemType.POTION_HP);
+            combatLog.setText(lootMessage);
+
+            // 2. Den Button umfunktionieren, damit der Spieler aktiv weiterklickt
+            attackButton.setText("Collect Loot & Continue");
+            attackButton.setOnAction(e -> {
+                // Zurück zur Story (Akt 3: Training-Entscheidung)
+                GameSession.setCurrentAct(StoryManager.ACT_3);
+                ViewManager.switchTo("story-view.fxml");
+            });
         }
     }
 }
