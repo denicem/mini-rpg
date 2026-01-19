@@ -1,5 +1,6 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.model.Dragon;
 import com.minirpg.game.model.Elf;
 import com.minirpg.game.model.Enemy;
 import com.minirpg.game.model.Mage;
@@ -21,12 +22,15 @@ public class StoryController {
     private int chunkIndex = 0;
     private boolean isCombatPhase = false;
 
+    private int forestCombatStage = 0;
+
     @FXML
     public void initialize() {
         // Spielerbild laden
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
         // Start mit Akt 1
-        loadAct(StoryManager.ACT_1);
+//        loadAct(StoryManager.ACT_1);
+        loadAct(GameSession.getCurrentAct());
     }
 
     private void loadAct(int act) {
@@ -101,7 +105,7 @@ public class StoryController {
         switch (act) {
             case StoryManager.ACT_1 -> loadAct(StoryManager.ACT_2);
             case StoryManager.ACT_2 -> {
-                GameSession.setCurrentEnemy(new Mage());
+                GameSession.setCurrentEnemy(new Elf());
                 ViewManager.switchTo("combat-view.fxml");
             }
             case StoryManager.ACT_3 -> {
