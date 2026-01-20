@@ -14,7 +14,9 @@ public class CombatController {
     @FXML private Label combatLog;
     @FXML private Label playerHpLabel;
     @FXML private Label enemyHpLabel;
+    @FXML private Button doNothingButton;
     @FXML private Button attackButton;
+    @FXML private Button potionButton;
 
     private Player player;
     private Enemy enemy;
@@ -25,6 +27,9 @@ public class CombatController {
     public void initialize() {
         this.player = GameSession.getPlayer();
         this.enemy = GameSession.getCurrentEnemy();
+        this.player.addItem(new Potion());
+        this.player.addItem(new Potion());
+        this.player.addItem(new Potion());
 
         // Bilder laden
         Helper.loadImage(backgroundView, Assets.BG_DARK_FOREST);
@@ -33,6 +38,7 @@ public class CombatController {
 
         // UI initialisieren
         updateHpDisplay();
+        updatePotionButton();
         combatLog.setText("A wild " + enemy.getName() + " blocks your path!");
     }
 
@@ -48,6 +54,24 @@ public class CombatController {
     private void updateHpDisplay() {
         playerHpLabel.setText("HP: " + player.getHp() + "/" + player.getMaxHp());
         enemyHpLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHp());
+    }
+
+    @FXML
+    private void onDoNothingButtonClick() {
+        StringBuilder turnLog = new StringBuilder();
+        // 2. Prüfen, ob der Gegner noch lebt
+        if (enemy.isAlive()) {
+            // 3. Gegner schlägt zurück!
+            String enemyAttackResult = BattleSystem.performAttack(enemy, player);
+            turnLog.append(enemyAttackResult);
+        }
+
+        // UI aktualisieren
+        combatLog.setText(turnLog.toString());
+        updateHpDisplay();
+
+        // 4. Prüfen, ob jemand besiegt wurde
+        checkBattleStatus();
     }
 
     @FXML
@@ -87,10 +111,14 @@ public class CombatController {
             GameSession.setFinalEnding(StoryManager.Ending.GOOD);
             ViewManager.switchTo("end-screen-view.fxml");
         } else {
+            Potion reward = new Potion();
+            this.player.addItem(reward);
             // 1. Loot-Nachricht aus dem StoryManager holen
             // Fürs Erste nehmen wir eine Potion als Beispiel-Loot
             String lootMessage = sm.getLootPickupText(StoryManager.ItemType.POTION_HP);
+            System.out.println(lootMessage);
             combatLog.setText(lootMessage);
+            this.updatePotionButton();
 
             // 2. Den Button umfunktionieren, damit der Spieler aktiv weiterklickt
             attackButton.setText("Collect Loot & Continue");
@@ -99,6 +127,48 @@ public class CombatController {
                 GameSession.setCurrentAct(StoryManager.ACT_3);
                 ViewManager.switchTo("story-view.fxml");
             });
+            doNothingButton.setDisable(true);
+            potionButton.setDisable(true);
+        }
+    }
+
+    private Potion findPotionInInventory() {
+        for (Item item : player.getInventory()) {
+            if (item instanceof Potion) {
+                return (Potion) item;
+            }
+        }
+        return null;
+    }
+
+    private void updatePotionButton() {
+        int count = this.player.getInventory().size();
+        potionButton.setText("USE POTION (" + count + ")");
+        potionButton.setDisable(count == 0); // Button deaktivieren, wenn keine Tränke da sind
+    }
+
+    @FXML
+    private void onPotionButtonClick() {
+        Potion potion = findPotionInInventory();
+
+        if (potion != null) {
+            StringBuilder turnLog = new StringBuilder();
+
+            // 1. Spieler nutzt den Trank
+            String useMsg = player.useItem(potion);
+            turnLog.append(useMsg).append("\n");
+
+            // 2. Der Gegner nutzt deine Heilpause für einen Angriff!
+            if (enemy.isAlive()) {
+                String enemyAttackResult = BattleSystem.performAttack(enemy, player);
+                turnLog.append(enemyAttackResult);
+            }
+
+            // UI aktualisieren
+            combatLog.setText(turnLog.toString());
+            updateHpDisplay();
+            updatePotionButton();
+            checkBattleStatus();
         }
     }
 }

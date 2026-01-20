@@ -29,7 +29,13 @@
                 <VBox alignment="CENTER" spacing="20.0">
                     <children>
                         <Label fx:id="combatLog" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 15;" text="Combat log starts here..." wrapText="true" />
-                        <Button fx:id="attackButton" onAction="#onAttackButtonClick" prefWidth="250.0" style="-fx-font-size: 20px; -fx-base: #8B0000; -fx-text-fill: white;" text="ATTACK!" />
+                        <HBox alignment="CENTER" spacing="20.0">
+                            <children>
+                                <Button fx:id="doNothingButton" onAction="#onDoNothingButtonClick" prefWidth="200.0" style="-fx-font-size: 18px; -fx-base: grey; -fx-text-fill: white;" text="DO NOTHING..." />
+                                <Button fx:id="attackButton" onAction="#onAttackButtonClick" prefWidth="200.0" style="-fx-font-size: 18px; -fx-base: #8B0000; -fx-text-fill: white;" text="ATTACK!" />
+                                <Button fx:id="potionButton" onAction="#onPotionButtonClick" prefWidth="200.0" style="-fx-font-size: 18px; -fx-base: #006400; -fx-text-fill: white;" text="USE POTION (0)" />
+                            </children>
+                        </HBox>
                     </children>
                 </VBox>
             </children>
