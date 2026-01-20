@@ -14,9 +14,12 @@ public class CombatController {
     @FXML private Label combatLog;
     @FXML private Label playerHpLabel;
     @FXML private Label enemyHpLabel;
+    @FXML private Label playerAtkDefLabel;
+    @FXML private Label enemyAtkDefLabel;
     @FXML private Button doNothingButton;
     @FXML private Button attackButton;
     @FXML private Button potionButton;
+    @FXML private Button fleeButton;
 
     private Player player;
     private Enemy enemy;
@@ -27,9 +30,6 @@ public class CombatController {
     public void initialize() {
         this.player = GameSession.getPlayer();
         this.enemy = GameSession.getCurrentEnemy();
-        this.player.addItem(new Potion());
-        this.player.addItem(new Potion());
-        this.player.addItem(new Potion());
 
         // Bilder laden
         Helper.loadImage(backgroundView, Assets.BG_DARK_FOREST);
@@ -37,7 +37,7 @@ public class CombatController {
         loadEnemyImage();
 
         // UI initialisieren
-        updateHpDisplay();
+        updateStatsDisplay();
         updatePotionButton();
         combatLog.setText("A wild " + enemy.getName() + " blocks your path!");
     }
@@ -51,9 +51,14 @@ public class CombatController {
         }
     }
 
-    private void updateHpDisplay() {
+    private void updateStatsDisplay() {
+        // HP Anzeigen
         playerHpLabel.setText("HP: " + player.getHp() + "/" + player.getMaxHp());
         enemyHpLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHp());
+
+        // ATK & DEF Anzeigen
+        playerAtkDefLabel.setText("ATK: " + player.getStats().getAtk() + " | DEF: " + player.getStats().getDef());
+        enemyAtkDefLabel.setText("ATK: " + enemy.getStats().getAtk() + " | DEF: " + enemy.getStats().getDef());
     }
 
     @FXML
@@ -68,10 +73,15 @@ public class CombatController {
 
         // UI aktualisieren
         combatLog.setText(turnLog.toString());
-        updateHpDisplay();
+        updateStatsDisplay();
 
         // 4. Prüfen, ob jemand besiegt wurde
         checkBattleStatus();
+    }
+
+    @FXML
+    private void onFleeButtonClick() {
+        this.combatLog.setText("You really wanna flee now? Bruh... NO!");
     }
 
     @FXML
@@ -91,7 +101,7 @@ public class CombatController {
 
         // UI aktualisieren
         combatLog.setText(turnLog.toString());
-        updateHpDisplay();
+        updateStatsDisplay();
 
         // 4. Prüfen, ob jemand besiegt wurde
         checkBattleStatus();
@@ -166,7 +176,7 @@ public class CombatController {
 
             // UI aktualisieren
             combatLog.setText(turnLog.toString());
-            updateHpDisplay();
+            updateStatsDisplay();
             updatePotionButton();
             checkBattleStatus();
         }
