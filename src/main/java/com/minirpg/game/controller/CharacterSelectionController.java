@@ -1,13 +1,13 @@
 package com.minirpg.game.controller;
 
+import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
+
 import com.minirpg.game.model.Player;
 import com.minirpg.game.util.Assets;
 import com.minirpg.game.util.GameSession;
 import com.minirpg.game.util.Helper;
 import com.minirpg.game.util.ViewManager;
-import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class CharacterSelectionController {
     @FXML private ImageView backgroundImage;
@@ -16,10 +16,9 @@ public class CharacterSelectionController {
 
     @FXML
     public void initialize() {
-        // Hintergrund laden
-        Helper.loadImage(backgroundImage, Assets.BG_FOREST);
+        Helper.logCall(this);
 
-        // Charakter-Vorschauen laden
+        Helper.loadImage(backgroundImage, Assets.BG_FOREST);
         Helper.loadImage(knightView, Assets.CH_KNIGHT);
         Helper.loadImage(knightGirlView, Assets.CH_KNIGHT_GIRL);
     }
@@ -28,17 +27,20 @@ public class CharacterSelectionController {
     private void onKnightSelected() {
         System.out.println("Knight selected!");
 
+        // GameSession starten und Player erstellen
+        GameSession.startNewGame("Sir Alistair");
         GameSession.setSelectedCharacterType("knight"); // Typ als "knight" speichern
-        GameSession.setPlayer(new Player("Sir Alistair")); // Player Objekt erstellen
-        ViewManager.switchTo("story-view.fxml"); // View wechseln
+        ViewManager.switchTo("story-view.fxml");
     }
 
     @FXML
     private void onKnightGirlSelected() {
         System.out.println("Knight Girl selected!");
 
+        // GameSession starten und Player erstellen
+        GameSession.startNewGame("Lady Lala");
         GameSession.setSelectedCharacterType("knight_girl"); // Typ als "knight_girl" speichern
-        GameSession.setPlayer(new Player("Lady Lala")); // Player erstellen
-        ViewManager.switchTo("story-view.fxml"); // View wechseln
+        ViewManager.switchTo("story-view.fxml");
     }
+
 }
