@@ -25,6 +25,7 @@ public class CombatController {
     private Enemy enemy;
 
     private StoryManager sm = new StoryManager();
+    private boolean isCombatOver = false;
     private boolean isItemMenuOpen = false;
 
     @FXML
@@ -37,10 +38,13 @@ public class CombatController {
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
         loadEnemyImage();
 
+        // call on. setVisible() from these buttons -> automatically triggers .setManaged() as well w the same value
+        potionButton.managedProperty().bind(potionButton.visibleProperty());
+        doNothingButton.managedProperty().bind(doNothingButton.visibleProperty());
+        fleeButton.managedProperty().bind(fleeButton.visibleProperty());
+
         // UI initialisieren
-        updateStatsDisplay();
-        refreshButtons();
-//        updatePotionButton();
+        refreshUI();
         combatLog.setText("A wild " + enemy.getName() + " blocks your path!");
     }
 
@@ -66,7 +70,7 @@ public class CombatController {
     @FXML
     private void onDoNothingButtonClick() {
         if (isItemMenuOpen) {
-            useItemByType(IronCharm.class);
+            useItemByType(StrengthPotion.class);
             return ;
         }
         StringBuilder turnLog = new StringBuilder();
@@ -88,8 +92,7 @@ public class CombatController {
     @FXML
     private void onFleeButtonClick() {
         if (isItemMenuOpen) {
-            isItemMenuOpen = false;
-            refreshButtons();
+            useItemByType(IronCharm.class);
             return ;
         }
         this.combatLog.setText("You really wanna flee now? Bruh... NO!");
@@ -97,8 +100,13 @@ public class CombatController {
 
     @FXML
     private void onAttackButtonClick() {
+        if (isCombatOver) {
+            GameSession.setCurrentAct(StoryManager.ACT_3);
+            ViewManager.switchTo("story-view.fxml");
+            return ;
+        }
         if (isItemMenuOpen) {
-            useItemByType(StrengthPotion.class);
+            useItemByType(Potion.class);
             return ;
         }
         StringBuilder turnLog = new StringBuilder();
@@ -116,7 +124,7 @@ public class CombatController {
 
         // UI aktualisieren
         combatLog.setText(turnLog.toString());
-        updateStatsDisplay();
+        refreshUI();
 
         // 4. Prüfen, ob jemand besiegt wurde
         checkBattleStatus();
@@ -136,8 +144,7 @@ public class CombatController {
             GameSession.setFinalEnding(StoryManager.Ending.GOOD);
             ViewManager.switchTo("end-screen-view.fxml");
         } else {
-            Potion reward = new Potion();
-            this.player.addItem(reward);
+            this.player.addItem(new Potion());
             this.player.addItem(new StrengthPotion());
             this.player.addItem(new IronCharm());
             // 1. Loot-Nachricht aus dem StoryManager holen
@@ -145,17 +152,8 @@ public class CombatController {
             String lootMessage = sm.getLootPickupText(StoryManager.ItemType.POTION_HP);
             System.out.println(lootMessage);
             combatLog.setText(lootMessage);
-            this.updatePotionButton();
-
-            // 2. Den Button umfunktionieren, damit der Spieler aktiv weiterklickt
-            attackButton.setText("Collect Loot & Continue");
-            attackButton.setOnAction(e -> {
-                // Zurück zur Story (Akt 3: Training-Entscheidung)
-                GameSession.setCurrentAct(StoryManager.ACT_3);
-                ViewManager.switchTo("story-view.fxml");
-            });
-            doNothingButton.setDisable(true);
-            potionButton.setDisable(true);
+            isCombatOver = true;
+            refreshUI();
         }
     }
 
@@ -168,41 +166,13 @@ public class CombatController {
         return null;
     }
 
-    private void updatePotionButton() {
-        int count = this.player.getInventory().size();
-        potionButton.setText("USE POTION (" + count + ")");
-        potionButton.setDisable(count == 0); // Button deaktivieren, wenn keine Tränke da sind
-    }
-
     @FXML
     private void onPotionButtonClick() {
-        if (isItemMenuOpen) {
-            useItemByType(Potion.class);
-            return ;
-        }
-        this.isItemMenuOpen = true;
-        this.refreshButtons();
-//        Potion potion = findPotionInInventory();
-//
-//        if (potion != null) {
-//            StringBuilder turnLog = new StringBuilder();
-//
-//            // 1. Spieler nutzt den Trank
-//            String useMsg = player.useItem(potion);
-//            turnLog.append(useMsg).append("\n");
-//
-//            // 2. Der Gegner nutzt deine Heilpause für einen Angriff!
-//            if (enemy.isAlive()) {
-//                String enemyAttackResult = BattleSystem.performAttack(enemy, player);
-//                turnLog.append(enemyAttackResult);
-//            }
-//
-//            // UI aktualisieren
-//            combatLog.setText(turnLog.toString());
-//            updateStatsDisplay();
-//            updatePotionButton();
-//            checkBattleStatus();
-//        }
+        if (isItemMenuOpen)
+            isItemMenuOpen = false;
+        else
+            isItemMenuOpen = true;
+        this.refreshUI();
     }
 
     private long countItems(Class<? extends Item> type) {
@@ -211,36 +181,40 @@ public class CombatController {
                 .count();
     }
 
-    // Methode, die das Aussehen der Buttons umschaltet
-    private void refreshButtons() {
-        if (!isItemMenuOpen) {
-            // Hauptmenü Zustand
+    private void refreshUI() {
+        updateStatsDisplay();
+
+        if (isCombatOver) {
+            attackButton.setText("Go on");
+            potionButton.setVisible(false);
+            doNothingButton.setVisible(false);
+            fleeButton.setVisible(false);
+        }
+        else if (isItemMenuOpen) {
+            attackButton.setText(String.format("HP Potion (%d)", countItems(Potion.class)));
+            doNothingButton.setText(String.format("ATK Buff (%d)", countItems(StrengthPotion.class)));
+            fleeButton.setText(String.format("DEF Buff (%d)", countItems(IronCharm.class)));
+            potionButton.setText("BACK");
+
+            attackButton.setDisable(countItems(Potion.class) == 0);
+            doNothingButton.setDisable(countItems(StrengthPotion.class) == 0);
+            fleeButton.setDisable(countItems(IronCharm.class) == 0);
+        }
+        else {
             attackButton.setText("ATTACK!");
             doNothingButton.setText("DO NOTHING...");
-            potionButton.setText("ITEMS"); // Umbenannt von "USE POTION"
+            potionButton.setText(String.format("ITEMS (%d)", this.player.getInventory().size()));
             fleeButton.setText("FLEE");
 
-            // Buttons wieder aktivieren (falls sie im Item-Menü leer waren)
             attackButton.setDisable(false);
             doNothingButton.setDisable(false);
-            potionButton.setDisable(false);
-        } else {
-            // Item-Untermenü Zustand
-            long hpCount = countItems(Potion.class);
-            long atkCount = countItems(StrengthPotion.class);
-            long defCount = countItems(IronCharm.class);
-
-            attackButton.setText("ATK Buff (" + atkCount + ")");
-            attackButton.setDisable(atkCount == 0);
-
-            doNothingButton.setText("DEF Buff (" + defCount + ")");
-            doNothingButton.setDisable(defCount == 0);
-
-            potionButton.setText("HP Potion (" + hpCount + ")");
-            potionButton.setDisable(hpCount == 0);
-
-            fleeButton.setText("BACK");
+            potionButton.setDisable(this.player.getInventory().isEmpty());
             fleeButton.setDisable(false);
+
+            attackButton.setVisible(true);
+            doNothingButton.setVisible(true);
+            potionButton.setVisible(true);
+            fleeButton.setVisible(true);
         }
     }
 
@@ -258,9 +232,8 @@ public class CombatController {
             }
 
             combatLog.setText(log.toString());
-            isItemMenuOpen = false; // Zurück zum Hauptmenü nach Benutzung
-            updateStatsDisplay();
-            refreshButtons();
+            isItemMenuOpen = false;
+            refreshUI();
             checkBattleStatus();
         }
     }
