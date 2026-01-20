@@ -1,14 +1,10 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
-import com.minirpg.game.util.Assets;
-import com.minirpg.game.util.GameSession;
-import com.minirpg.game.util.Helper;
-import com.minirpg.game.util.StoryManager;
 
 public class EndScreenController {
     @FXML private ImageView backgroundView;
@@ -16,38 +12,33 @@ public class EndScreenController {
     @FXML private Label titleLabel;
     @FXML private Label subtitleLabel;
 
-    private final StoryManager sm = new StoryManager();
-
     @FXML
     public void initialize() {
-        Helper.logCall(this);
-
-        Helper.loadImage(backgroundView, Assets.BG_ENDING);
-
-        displayEnding();
-    }
-
-    private void displayEnding() {
         StoryManager.Ending ending = GameSession.getFinalEnding();
-        if (ending == null) return;
 
-        subtitleLabel.setText(sm.getEndingText(ending));
+        // Standard-Hintergrund für Enden
+        Helper.loadImage(backgroundView, Assets.BG_ENDING);
 
         switch (ending) {
             case GOOD -> {
                 titleLabel.setText("VICTORY!");
+                subtitleLabel.setText("The Dragon is slain. You are a true Knight!");
                 Helper.loadImage(characterView, Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD);
             }
             case BAD -> {
                 titleLabel.setText("GAME OVER");
+                subtitleLabel.setText("Your journey ends here. You've become a dragon's snack.");
                 Helper.loadImage(characterView, Assets.CH_KNIGHT_SLAIN);
             }
             case COWARD -> {
                 titleLabel.setText("RETIRED");
-                Helper.loadImage(characterView, Assets.CH_KNIGHT);
+                subtitleLabel.setText("A warm bed and stew... but you'll always hear that whisper: 'Coward'.");
+                Helper.loadImage(characterView, Assets.CH_KNIGHT); // Normales Bild
+                Helper.loadImage(backgroundView, Assets.BG_AT_HOME);
             }
             case RETREAT -> {
                 titleLabel.setText("ESCAPE!");
+                subtitleLabel.setText("You sprinted away! Title earned: 'Knight of Swift Retreat'.");
                 Helper.loadImage(characterView, Assets.CH_KNIGHT);
             }
         }
