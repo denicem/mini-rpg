@@ -23,10 +23,7 @@ public class StoryController {
 
     @FXML
     public void initialize() {
-        // Spielerbild laden
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
-        // Start mit Akt 1
-//        loadAct(StoryManager.ACT_1);
         loadAct(GameSession.getCurrentAct());
     }
 
@@ -37,7 +34,7 @@ public class StoryController {
 
         // Hintergrund basierend auf Akt setzen
         Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
-        displayChunk();
+        this.displayChunk();
     }
 
     private void displayChunk() {
