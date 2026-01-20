@@ -1,6 +1,7 @@
 package com.minirpg.game.util;
 
 public class StoryManager {
+    public static final int ACT_HOME = -1; //Flee - Go Home
     public static final int ACT_1 = 1; // Intro + Scream
     public static final int ACT_2 = 2; // Forest
     public static final int ACT_3 = 3; // Combat
@@ -137,6 +138,14 @@ public class StoryManager {
             case BAD -> "You Died.";
             case COWARD -> "You turn around.\nA warm bed, a hot stew, zero monsters... all sounds great.\n\nBut something deep inside you whispers:\n\"Coward.\"";
             case RETREAT -> "You sprint out of the castle as fast as your armor allows.\n\nSomewhere far behind you, you hear a furious voice:\n\"Seriously?! This isn't how boss fights are supposed to work! WHO programmed you?\"\n\nTitle earned: \"Knight of Swift Retreat\"";
+        };
+    }
+
+    public String getBackgroundForEnding(Ending type) {
+        return switch (type) {
+            case COWARD -> Assets.BG_AT_HOME;
+            case GOOD -> Assets.BG_ENDING;
+            default -> Assets.BG_START_SCREEN;
         };
     }
 

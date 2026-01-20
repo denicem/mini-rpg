@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 public class StoryController {
     @FXML private ImageView gameSceneView;
     @FXML private ImageView playerImageView;
+    @FXML private ImageView npcImageView;
     @FXML private Label storyText;
     @FXML private Button continueButton;
     @FXML private Button exitButton;
@@ -34,6 +35,14 @@ public class StoryController {
 
         // Hintergrund basierend auf Akt setzen
         Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
+
+        if (act == StoryManager.ACT_4) {
+            npcImageView.setVisible(true);
+            Helper.loadImage(npcImageView, Assets.CH_PRINCESS);
+        } else {
+            npcImageView.setVisible(false);
+        }
+
         this.displayChunk();
     }
 

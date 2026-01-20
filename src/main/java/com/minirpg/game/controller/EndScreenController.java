@@ -34,6 +34,7 @@ public class EndScreenController {
                 titleLabel.setText("RETIRED");
                 subtitleLabel.setText("A warm bed and stew... but you'll always hear that whisper: 'Coward'.");
                 Helper.loadImage(characterView, Assets.CH_KNIGHT); // Normales Bild
+                Helper.loadImage(backgroundView, Assets.BG_AT_HOME);
             }
             case RETREAT -> {
                 titleLabel.setText("ESCAPE!");
