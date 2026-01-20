@@ -24,7 +24,6 @@ public class MainMenuController {
 
     @FXML
     private void onStartClicked() {
-        GameSession.startNewGame();
         ViewManager.switchTo("character-selection-view.fxml");
     }
 

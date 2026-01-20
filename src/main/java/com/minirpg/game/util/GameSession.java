@@ -15,8 +15,8 @@ public final class GameSession {
 
     private GameSession() {}
 
-    public static void startNewGame() {
-        player = new Player("Knight");
+    public static void startNewGame(String name) {
+        player = new Player(name);
         currentEnemy = null;
         pendingItem = null;
         currentAct = 1;
