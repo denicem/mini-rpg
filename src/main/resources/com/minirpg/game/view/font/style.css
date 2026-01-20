@@ -67,3 +67,25 @@
 	-fx-scale-x: 0.95;
 	-fx-scale-y: 0.95;
 }
+
+/* Animation für das Einblenden */
+.fade-in {
+    -fx-opacity: 0;
+    -fx-animation: fadeInAnim 0.5s forwards;
+}
+
+@keyframes fadeInAnim {
+    from { -fx-opacity: 0; }
+    to { -fx-opacity: 1; }
+}
+
+/* Animation für das Ausblenden */
+.fade-out {
+    -fx-opacity: 1;
+    -fx-animation: fadeOutAnim 0.5s forwards;
+}
+
+@keyframes fadeOutAnim {
+    from { -fx-opacity: 1; }
+    to { -fx-opacity: 0; }
+}
