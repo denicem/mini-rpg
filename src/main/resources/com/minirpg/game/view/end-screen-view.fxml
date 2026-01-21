@@ -36,7 +36,6 @@
                        wrapText="true" />
 
                 <Button onAction="#onCloseButtonClick"
-                        prefWidth="250.0"
                         style="-fx-font-size: 20px; -fx-cursor: hand;"
                         text="Exit Game" />
             </children>
