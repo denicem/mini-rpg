@@ -22,4 +22,15 @@ public class Helper {
             System.err.println("[ERROR] on loading image: " + imgPath);
         }
     }
+
+    /**
+     * Delays the execution of a specific action without freezing the game UI.
+     * @param millis       The wait time in milliseconds.
+     * @param continuation The code/action to run once the time has passed.
+     */
+    public static void delay(int millis, Runnable continuation) {
+        javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.millis(millis));
+        pause.setOnFinished(event -> continuation.run());
+        pause.play();
+    }
 }

@@ -1,8 +1,9 @@
 package com.minirpg.game.util;
 
-import com.minirpg.game.model.Enemy;
-import com.minirpg.game.model.Item;
-import com.minirpg.game.model.Player;
+import com.minirpg.game.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class GameSession {
     private static String selectedCharacterType; // Spielertyp wird hier gespeichert (Knight oder Knight_girl)
@@ -12,6 +13,7 @@ public final class GameSession {
     private static Item pendingItem;
     private static int currentAct = 0;
     private static StoryManager.Ending finalEnding;
+    private static int enemyCount;
 
     private GameSession() {}
 
@@ -19,6 +21,7 @@ public final class GameSession {
         player = new Player(name);
         currentEnemy = null;
         pendingItem = null;
+        enemyCount = 0;
         currentAct = 1;
     }
 
@@ -84,5 +87,43 @@ public final class GameSession {
     }
     public static void setFinalEnding(StoryManager.Ending ending) {
         finalEnding = ending;
+    }
+
+    public static void createCurrentEnemy(boolean isBoss) {
+        if (isBoss)
+            currentEnemy = new Dragon();
+        else if (enemyCount == 0)
+            currentEnemy = new Elf();
+        else if (enemyCount == 1)
+            currentEnemy = new Mage();
+        else
+            currentEnemy = (Math.random() < 0.5 ? new Elf() : new Mage());
+        ++enemyCount;
+    }
+
+    public static List<Item> createAndGetReward() {
+        List<Item> reward = new ArrayList<>();
+
+        // Standard Reward (Exactly one item)
+        double standardRoll = Math.random();
+        if (standardRoll < 0.33) {
+            reward.add(new Potion());
+        } else if (standardRoll < 0.67) {
+            reward.add(new StrengthPotion());
+        } else {
+            reward.add(new IronCharm());
+        }
+
+        // Extra reward if lucky!
+        double roll = Math.random();
+        if (roll > 0.60)
+            reward.add(new Potion());
+        if (roll > 0.75)
+            reward.add(new StrengthPotion());
+        if (roll > 0.67)
+            reward.add(new IronCharm());
+
+        player.getInventory().addAll(reward);
+        return reward;
     }
 }

@@ -1,25 +1,20 @@
 package com.minirpg.game.controller;
 
-import com.minirpg.game.model.*;
-import com.minirpg.game.util.*;
+import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
+import com.minirpg.game.model.*;
+import com.minirpg.game.util.*;
+
 public class CombatController {
-    @FXML private ImageView backgroundView;
-    @FXML private ImageView playerImageView;
-    @FXML private ImageView enemyImageView;
+    @FXML private ImageView backgroundView, playerImageView, enemyImageView;
+    @FXML private Label playerHpLabel, playerAtkDefLabel, enemyHpLabel, enemyAtkDefLabel;
     @FXML private Label combatLog;
-    @FXML private Label playerHpLabel;
-    @FXML private Label enemyHpLabel;
-    @FXML private Label playerAtkDefLabel;
-    @FXML private Label enemyAtkDefLabel;
-    @FXML private Button doNothingButton;
-    @FXML private Button attackButton;
-    @FXML private Button potionButton;
-    @FXML private Button fleeButton;
+    @FXML private Button attackButton, doNothingButton, potionButton, fleeButton;
 
     private Player player;
     private Enemy enemy;
@@ -30,167 +25,54 @@ public class CombatController {
 
     @FXML
     public void initialize() {
+        Helper.logCall(this);
+
+        // prepare Player and Enemy
         this.player = GameSession.getPlayer();
+        GameSession.createCurrentEnemy(GameSession.getCurrentAct() == StoryManager.ACT_5);
         this.enemy = GameSession.getCurrentEnemy();
 
         // Bilder laden
-        Helper.loadImage(backgroundView, Assets.BG_DARK_FOREST);
-        Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
-        loadEnemyImage();
+        loadCombatScene();
 
-        // call on. setVisible() from these buttons -> automatically triggers .setManaged() as well w the same value
+        // binds one button property to another
+        // -> call on. setVisible() from these buttons -> automatically triggers .setManaged() as well w the same value
         potionButton.managedProperty().bind(potionButton.visibleProperty());
         doNothingButton.managedProperty().bind(doNothingButton.visibleProperty());
         fleeButton.managedProperty().bind(fleeButton.visibleProperty());
 
-        // UI initialisieren
         refreshUI();
-        combatLog.setText("A wild " + enemy.getName() + " blocks your path!");
+        combatLog.setText(sm.getEnemyIntroText(StoryManager.EnemyType.DRAMATIC_ELF));
     }
 
-    private void loadEnemyImage() {
-        if (enemy instanceof Mage) Helper.loadImage(enemyImageView, Assets.CH_MAGE);
-        else if (enemy instanceof Elf) Helper.loadImage(enemyImageView, Assets.CH_ELF);
-        else if (enemy instanceof Dragon) {
-            Helper.loadImage(enemyImageView, Assets.CH_DRAGON);
-            Helper.loadImage(backgroundView, Assets.BG_CASTLE_INSIDE);
-        }
-    }
+    private void loadCombatScene() {
+        Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
 
-    private void updateStatsDisplay() {
-        // HP Anzeigen
-        playerHpLabel.setText("HP: " + player.getHp() + "/" + player.getMaxHp());
-        enemyHpLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHp());
-
-        // ATK & DEF Anzeigen
-        playerAtkDefLabel.setText("ATK: " + player.getStats().getAtk() + " | DEF: " + player.getStats().getDef());
-        enemyAtkDefLabel.setText("ATK: " + enemy.getStats().getAtk() + " | DEF: " + enemy.getStats().getDef());
-    }
-
-    @FXML
-    private void onDoNothingButtonClick() {
-        if (isItemMenuOpen) {
-            useItemByType(StrengthPotion.class);
-            return ;
-        }
-        StringBuilder turnLog = new StringBuilder();
-        // 2. Prüfen, ob der Gegner noch lebt
-        if (enemy.isAlive()) {
-            // 3. Gegner schlägt zurück!
-            String enemyAttackResult = BattleSystem.performAttack(enemy, player);
-            turnLog.append(enemyAttackResult);
-        }
-
-        // UI aktualisieren
-        combatLog.setText(turnLog.toString());
-        updateStatsDisplay();
-
-        // 4. Prüfen, ob jemand besiegt wurde
-        checkBattleStatus();
-    }
-
-    @FXML
-    private void onFleeButtonClick() {
-        if (isItemMenuOpen) {
-            useItemByType(IronCharm.class);
-            return ;
-        }
-        this.combatLog.setText("You really wanna flee now? Bruh... NO!");
-    }
-
-    @FXML
-    private void onAttackButtonClick() {
-        if (isCombatOver) {
-            GameSession.setCurrentAct(StoryManager.ACT_3);
-            ViewManager.switchTo("story-view.fxml");
-            return ;
-        }
-        if (isItemMenuOpen) {
-            useItemByType(Potion.class);
-            return ;
-        }
-        StringBuilder turnLog = new StringBuilder();
-
-        // 1. Spieler greift an
-        String playerAttackResult = BattleSystem.performAttack(player, enemy);
-        turnLog.append(playerAttackResult).append("\n");
-
-        // 2. Prüfen, ob der Gegner noch lebt
-        if (enemy.isAlive()) {
-            // 3. Gegner schlägt zurück!
-            String enemyAttackResult = BattleSystem.performAttack(enemy, player);
-            turnLog.append(enemyAttackResult);
-        }
-
-        // UI aktualisieren
-        combatLog.setText(turnLog.toString());
-        refreshUI();
-
-        // 4. Prüfen, ob jemand besiegt wurde
-        checkBattleStatus();
-    }
-
-    private void checkBattleStatus() {
-        if (!player.isAlive()) {
-            GameSession.setFinalEnding(StoryManager.Ending.BAD); //
-            ViewManager.switchTo("end-screen-view.fxml");
-        } else if (!enemy.isAlive()) {
-            handleVictory();
-        }
-    }
-
-    private void handleVictory() {
         if (enemy instanceof Dragon) {
-            GameSession.setFinalEnding(StoryManager.Ending.GOOD);
-            ViewManager.switchTo("end-screen-view.fxml");
-        } else {
-            this.player.addItem(new Potion());
-            this.player.addItem(new StrengthPotion());
-            this.player.addItem(new IronCharm());
-            // 1. Loot-Nachricht aus dem StoryManager holen
-            // Fürs Erste nehmen wir eine Potion als Beispiel-Loot
-            String lootMessage = sm.getLootPickupText(StoryManager.ItemType.POTION_HP);
-            System.out.println(lootMessage);
-            combatLog.setText(lootMessage);
-            isCombatOver = true;
-            refreshUI();
+            Helper.loadImage(backgroundView, Assets.BG_CASTLE_INSIDE);
+            Helper.loadImage(enemyImageView, Assets.CH_DRAGON);
+            return ;
         }
-    }
 
-    private Potion findPotionInInventory() {
-        for (Item item : player.getInventory()) {
-            if (item instanceof Potion) {
-                return (Potion) item;
-            }
-        }
-        return null;
-    }
-
-    @FXML
-    private void onPotionButtonClick() {
-        if (isItemMenuOpen)
-            isItemMenuOpen = false;
+        Helper.loadImage(backgroundView, Assets.BG_DARK_FOREST);
+        if (enemy instanceof Elf)
+            Helper.loadImage(enemyImageView, Assets.CH_ELF);
+        else if (enemy instanceof Mage)
+            Helper.loadImage(enemyImageView, Assets.CH_MAGE);
         else
-            isItemMenuOpen = true;
-        this.refreshUI();
-    }
-
-    private long countItems(Class<? extends Item> type) {
-        return player.getInventory().stream()
-                .filter(type::isInstance)
-                .count();
+            System.err.println("Enemy Image not found.");
     }
 
     private void refreshUI() {
         updateStatsDisplay();
 
-        if (isCombatOver) {
+        if (isCombatOver) { // button layout after winning combat
             attackButton.setText("Go on");
             potionButton.setVisible(false);
             doNothingButton.setVisible(false);
             fleeButton.setVisible(false);
         }
-        else if (isItemMenuOpen) {
+        else if (isItemMenuOpen) { // button layout for selecting item
             attackButton.setText(String.format("HP Potion (%d)", countItems(Potion.class)));
             doNothingButton.setText(String.format("ATK Buff (%d)", countItems(StrengthPotion.class)));
             fleeButton.setText(String.format("DEF Buff (%d)", countItems(IronCharm.class)));
@@ -200,7 +82,7 @@ public class CombatController {
             doNothingButton.setDisable(countItems(StrengthPotion.class) == 0);
             fleeButton.setDisable(countItems(IronCharm.class) == 0);
         }
-        else {
+        else { // button layout for choosing combat action
             attackButton.setText("ATTACK!");
             doNothingButton.setText("DO NOTHING...");
             potionButton.setText(String.format("ITEMS (%d)", this.player.getInventory().size()));
@@ -218,18 +100,134 @@ public class CombatController {
         }
     }
 
+    private void updateStatsDisplay() { // updates HP, ATK & DEF stats
+        playerHpLabel.setText(String.format("HP: %d/%d", player.getHp(), player.getMaxHp()));
+        enemyHpLabel.setText(String.format("HP: %d/%d", enemy.getHp(), enemy.getMaxHp()));
+
+        playerAtkDefLabel.setText(String.format("ATK: %d | DEF: %d",player.getStats().getAtk(), player.getStats().getDef()));
+        enemyAtkDefLabel.setText(String.format("ATK: %d | DEF: %d",enemy.getStats().getAtk(), enemy.getStats().getDef()));
+    }
+
+    private String handleEnemyTurn() {
+        return handleEnemyTurn(true);
+    }
+
+    private String handleEnemyTurn(boolean firstNewline) {
+        String enemyLog = "";
+        if (enemy.isAlive()) {
+            if (firstNewline)
+                enemyLog += '\n';
+            enemyLog += BattleSystem.performAttack(enemy, player);
+        }
+        return enemyLog;
+    }
+
+    @FXML
+    private void onAttackButtonClick() { // Attack/Potion Button
+        if (isCombatOver) {
+            ViewManager.switchTo("story-view.fxml");
+            return ;
+        }
+        if (isItemMenuOpen) {
+            useItemByType(Potion.class);
+            return ;
+        }
+        StringBuilder turnLog = new StringBuilder();
+
+        // Player's turn
+        String playerAttackResult = BattleSystem.performAttack(player, enemy);
+        turnLog.append(playerAttackResult).append('\n');
+        combatLog.setText(turnLog.toString());
+        System.out.println(playerAttackResult);
+
+        // Enemy's turn
+        turnLog.append(handleEnemyTurn());
+
+        combatLog.setText(turnLog.toString());
+        refreshUI();
+        checkBattleStatus();
+    }
+
+    @FXML
+    private void onDoNothingButtonClick() {
+        if (isItemMenuOpen) {
+            useItemByType(StrengthPotion.class);
+            return ;
+        }
+        StringBuilder turnLog = new StringBuilder();
+
+        // Enemy's turn
+        turnLog.append(handleEnemyTurn(false));
+
+        combatLog.setText(turnLog.toString());
+        refreshUI();
+        checkBattleStatus();
+    }
+
+    @FXML
+    private void onPotionButtonClick() {
+        isItemMenuOpen = !isItemMenuOpen;
+        this.refreshUI();
+    }
+
+    @FXML
+    private void onFleeButtonClick() {
+        if (isItemMenuOpen) {
+            useItemByType(IronCharm.class);
+            return ;
+        }
+        this.combatLog.setText("You really wanna flee now? Bruh... NO!");
+    }
+
+    private void checkBattleStatus() {
+        if (!player.isAlive()) {
+            GameSession.setFinalEnding(StoryManager.Ending.BAD);
+            ViewManager.switchTo("end-screen-view.fxml");
+        } else if (!enemy.isAlive()) {
+            handleVictory();
+        }
+    }
+
+    private void handleVictory() {
+        Helper.delay(1000, () -> {
+            if (enemy instanceof Dragon) {
+                GameSession.setFinalEnding(StoryManager.Ending.GOOD);
+                ViewManager.switchTo("end-screen-view.fxml");
+                return ;
+            }
+            List<Item> reward = GameSession.createAndGetReward();
+
+            String lootMessage = (reward.size() < 2 ? "ONE ITEM" : " MORE ITEMS! YAY");
+            combatLog.setText(lootMessage);
+            isCombatOver = true;
+            refreshUI();
+        });
+    }
+
+    // private methods for player's item functionality
+    private int countItems(Class<? extends Item> type) {
+        int count = 0;
+        for (Item item : player.getInventory()) {
+            if (type.isInstance(item)) {
+                ++count;
+            }
+        }
+        return count;
+    }
+
     private void useItemByType(Class<? extends Item> type) {
-        Item toUse = player.getInventory().stream()
-                .filter(type::isInstance)
-                .findFirst()
-                .orElse(null);
+        Item toUse = null;
+        for (Item item : player.getInventory()) {
+            if (type.isInstance(item)) {
+                toUse = item;
+                break ;
+            }
+        }
         if (toUse != null) {
             StringBuilder log = new StringBuilder();
             log.append(player.useItem(toUse)).append("\n"); //
 
-            if (enemy.isAlive()) {
-                log.append(BattleSystem.performAttack(enemy, player)); //
-            }
+            log.append(handleEnemyTurn());
 
             combatLog.setText(log.toString());
             isItemMenuOpen = false;
