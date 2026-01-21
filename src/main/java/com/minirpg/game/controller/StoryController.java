@@ -1,12 +1,13 @@
 package com.minirpg.game.controller;
 
-import com.minirpg.game.util.*;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
+import com.minirpg.game.util.*;
 
 public class StoryController {
     @FXML private ImageView gameSceneView;

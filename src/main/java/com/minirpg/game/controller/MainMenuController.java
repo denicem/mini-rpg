@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 
 import com.minirpg.game.util.Assets;
-import com.minirpg.game.util.GameSession;
 import com.minirpg.game.util.Helper;
 import com.minirpg.game.util.ViewManager;
 
