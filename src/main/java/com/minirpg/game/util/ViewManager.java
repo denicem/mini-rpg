@@ -13,7 +13,7 @@ import java.io.IOException;
 public class ViewManager {
     private static Stage primaryStage;
 
-    // Diese Methode wird einmalig beim Spielstart aufgerufen
+    //Methode wird einmalig beim Spielstart aufgerufen
     public static void setStage(Stage stage) {
         primaryStage = stage;
     }
