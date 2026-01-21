@@ -61,7 +61,7 @@
 
                         <Label fx:id="combatLog"
                                prefWidth="800.0"
-                               style="-fx-background-color: rgba(0,0,0,0.8); -fx-font-size: 18px; -fx-padding: 15;"
+                               style="-fx-background-color: rgba(0,0,0,0.8); -fx-font-size: 16px; -fx-padding: 15;"
                                text="Combat log starts here..."
                                wrapText="true" />
 

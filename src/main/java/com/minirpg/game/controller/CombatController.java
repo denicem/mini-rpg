@@ -42,7 +42,7 @@ public class CombatController {
         fleeButton.managedProperty().bind(fleeButton.visibleProperty());
 
         refreshUI();
-        combatLog.setText(sm.getEnemyIntroText(StoryManager.EnemyType.DRAMATIC_ELF));
+        combatLog.setText(GameSession.getEnemyIntro());
     }
 
     private void loadCombatScene() {
@@ -206,7 +206,7 @@ public class CombatController {
             }
             List<Item> reward = GameSession.createAndGetReward();
 
-            String lootMessage = (reward.size() < 2 ? "ONE ITEM" : " MORE ITEMS! YAY");
+            String lootMessage = (GameSession.createLootMsg(reward));
             combatLog.setText(lootMessage);
             isCombatOver = true;
             refreshUI();

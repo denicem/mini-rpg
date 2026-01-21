@@ -25,15 +25,13 @@ public class StoryController {
     public void initialize() {
         Helper.logCall(this);
 
-        //Knight Girl inverted
         String charPath = GameSession.getCharacterImgPath();
         Helper.loadImage(playerImageView, charPath);
-
-        if (charPath != null && charPath.contains("knight_girl.png")) {
+        if (charPath != null && charPath.contains("knight_girl.png")) { // Knight Girl inverted
             playerImageView.setScaleX(-1);
         }
 
-        System.out.printf("ACT %d: ", GameSession.getCurrentAct());
+        System.out.printf("ACT %d.\n", GameSession.getCurrentAct());
         this.exitButton.managedProperty().bind(this.exitButton.visibleProperty());
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
 
@@ -108,7 +106,6 @@ public class StoryController {
                 if (act == StoryManager.ACT_2) GameSession.nextAct();
                 ViewManager.switchTo("combat-view.fxml");
             }
-
         }
     }
 

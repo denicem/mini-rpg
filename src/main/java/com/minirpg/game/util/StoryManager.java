@@ -1,5 +1,10 @@
 package com.minirpg.game.util;
 
+import com.minirpg.game.model.Item;
+import com.minirpg.game.model.Potion;
+import com.minirpg.game.model.StrengthPotion;
+import com.minirpg.game.model.IronCharm;
+
 public class StoryManager {
     public static final int ACT_HOME = -1; //Flee - Go Home
     public static final int ACT_1 = 1; // Intro + Scream
@@ -15,7 +20,7 @@ public class StoryManager {
 
     public enum ItemType {
         POTION_HP,
-        STRENGTHPOTION_HP,
+        STRENGTHPOTION_ATK,
         IRONCHARM_DEF,
         SWORD_ATK,
         POTION_COURAGE
@@ -31,7 +36,7 @@ public class StoryManager {
     public String[] getStoryChunks(int act) {
         return switch (act) {
             case ACT_1 -> new String[]{
-                    "You are a young recruit of the Royal Knight Order. To become a full-fledged knight, you must soon complete your first official trial, a solo mission designed to test courage, judgment, and (ideally) zero dying.",
+                    "You are a young recruit of the Royal Knight Order. To become a full-fledged knight, you must soon complete your first official trial, a solo mission designed to test courage, judgement, and (ideally) zero dying.",
                     "You decided to train your swordsmanship and footwork in the nearby forest.",
                     "You walk through the woods, humming to yourself — when a distant scream cuts through the air. You freeze. \"That didn’t sound like a friendly squirrel.\" \"Aaaaaaaah\""
             };
@@ -81,21 +86,23 @@ public class StoryManager {
     }
 
     public String getEnemyIntroText(EnemyType type) {
-        if (type == null) return "An enemy appears!";
+        if (type == null) return "Another encounter, another chance to prove that your courage is slightly greater than your common sense.";
 
         switch (type) {
             case FOREST_MAGE:
-                return "A forest mage steps out, raising his staff.\n"
-                        + "He looks kind... and dangerously unsure.\n\n"
-                        + "\"Fear not, child! I shall protect thee with a spell of-\"\n"
-                        + "... OH NO. That was the fireball one.\"";
-
+                return """
+                        A forest mage steps out, raising his staff.
+                        He looks kind... and dangerously unsure.
+                        
+                        "Fear not, child! I shall protect thee with a spell of-"
+                        ... OH NO. That was the fireball one.\"""";
             case DRAMATIC_ELF:
-                return "An elf storms toward you, devastated.\n\n"
-                        + "\"You trampled my sacred moss! MY LIFE IS RUINED!\"\n"
-                        + "\"Are you... okay?\"\n"
-                        + "\"NO. NOW SUFFER WITH ME!\"";
-
+                return """
+                        An elf storms toward you, devastated.
+                        
+                        "You trampled my sacred moss! MY LIFE IS RUINED!"
+                        "Are you... okay?"
+                        "NO. NOW SUFFER WITH ME!\"""";
             default:
                 return "An enemy appears!";
         }
@@ -106,29 +113,30 @@ public class StoryManager {
 
         String intro = "You defeated the enemy.\nA small glimmer catches your eye - an item!\n\n";
         switch (itemType) {
-            case POTION_HP:
-                return intro + "You pick up: Potion of Reasonable Hope (+20 HP)\n"
-                        + "\"Now with 12% more placebo!\"";
+            case POTION_HP -> intro += """
+                    You pick up:
+                    Potion of Reasonable Hope (+20 HP)
+                    "Now with 12% more placebo!\"""";
+            case STRENGTHPOTION_ATK -> intro += """
+                    You pick up:
+                    Elixir of Excessive Confidence (+5 ATK)
+                    "Side effects may include shouting dramatic attack names.\"""";
+            case IRONCHARM_DEF -> intro += """
+                    You pick up:
+                    Iron Charm of Emotional Support (+3 DEF)
+                    "It doesn’t really protect you, but it believes in you.\"""";
+            case SWORD_ATK -> intro += """
+                    You pick up:
+                    Silver Sword of Questionable Origins (+10 ATK)
+                    "Nobody knows where it came from. Nobody asked. Probably fine.\"""";
+            case POTION_COURAGE -> intro += """
+                    You pick up:
+                    Potion of Selective Courage (+10% Escape Chance)
+                    "Helps you boldly run away from your problems.\"""";
 
-            case STRENGTHPOTION_HP:
-                return intro + "You pick up: Elixir of Excessive Confidence (+5 ATK)\n"
-                        + "\"Side effects may include shouting dramatic attack names.\"";
-
-            case IRONCHARM_DEF:
-                return intro + "You pick up: Iron Charm of Emotional Support (+3 DEF)\n"
-                        + "\" It doesn’t really protect you, but it believes in you.\"";
-
-            case SWORD_ATK:
-                return intro + "You pick up: Silver Sword of Questionable Origins (+10 ATK)\\n"
-                        + "\"Nobody knows where it came from. Nobody asked. Probably fine.\"";
-
-            case POTION_COURAGE:
-                return intro + "You pick up: Potion of Selective Courage (+10% Escape Chance)\n\n"
-                        + "\"Helps you boldly run away from your problems.\"";
-
-            default:
-                return intro + "You pick up something mysterious.";
+            default -> intro += "You pick up something mysterious.";
         }
+        return intro;
     }
 
     public String getEndingText(Ending type) {
