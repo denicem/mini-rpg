@@ -14,6 +14,7 @@ public final class GameSession {
     private static int currentAct = 0;
     private static StoryManager.Ending finalEnding;
     private static int enemyCount;
+    private static final StoryManager sm = new StoryManager();
 
     private GameSession() {}
 
@@ -125,5 +126,35 @@ public final class GameSession {
 
         player.getInventory().addAll(reward);
         return reward;
+    }
+
+    public static String getEnemyIntro() {
+        if (enemyCount > 2) {
+            return sm.getEnemyIntroText(null);
+        }
+        else if (currentEnemy instanceof Elf) {
+            return sm.getEnemyIntroText(StoryManager.EnemyType.DRAMATIC_ELF);
+        }
+        else if (currentEnemy instanceof Mage) {
+            return sm.getEnemyIntroText(StoryManager.EnemyType.FOREST_MAGE);
+        }
+        else
+            return sm.getEnemyIntroText(null);
+    }
+
+    public static String createLootMsg(List<Item> loot) {
+        StringBuilder lootMsgSB = new StringBuilder();
+        Item firstItem = loot.getFirst();
+        if (firstItem instanceof Potion)
+            lootMsgSB.append(sm.getLootPickupText(StoryManager.ItemType.POTION_HP));
+        else if (firstItem instanceof StrengthPotion)
+            lootMsgSB.append(sm.getLootPickupText(StoryManager.ItemType.STRENGTHPOTION_ATK));
+        else if (firstItem instanceof IronCharm)
+            lootMsgSB.append(sm.getLootPickupText(StoryManager.ItemType.IRONCHARM_DEF));
+
+        if (loot.size() > 1)
+            lootMsgSB.append(String.format("\n\nLucky bastard got %d more. ", loot.size() - 1));
+
+        return lootMsgSB.toString();
     }
 }
