@@ -1,6 +1,6 @@
-package com.minirpg.game.model;
+package com.minirpg.game.model.character;
 
-import java.util.List;
+import com.minirpg.game.model.Stats;
 
 /**
  * Abstract base class representing a character in the MiniRPG game.

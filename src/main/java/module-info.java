@@ -13,4 +13,8 @@ module com.minirpg.game {
     opens com.minirpg.game.model to javafx.fxml;
     exports com.minirpg.game.util;
     opens com.minirpg.game.util to javafx.fxml;
+    exports com.minirpg.game.model.character;
+    opens com.minirpg.game.model.character to javafx.fxml;
+    exports com.minirpg.game.model.item;
+    opens com.minirpg.game.model.item to javafx.fxml;
 }

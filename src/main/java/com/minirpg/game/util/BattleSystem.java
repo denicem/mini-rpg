@@ -1,7 +1,7 @@
 package com.minirpg.game.util;
 
-import com.minirpg.game.model.Character;
-import com.minirpg.game.model.Player;
+import com.minirpg.game.model.character.Character;
+import com.minirpg.game.model.character.Player;
 import com.minirpg.game.model.Stats;
 
 import java.util.Random;

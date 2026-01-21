@@ -1,10 +1,5 @@
 package com.minirpg.game.util;
 
-import com.minirpg.game.model.Item;
-import com.minirpg.game.model.Potion;
-import com.minirpg.game.model.StrengthPotion;
-import com.minirpg.game.model.IronCharm;
-
 public class StoryManager {
     public static final int ACT_HOME = -1; //Flee - Go Home
     public static final int ACT_1 = 1; // Intro + Scream

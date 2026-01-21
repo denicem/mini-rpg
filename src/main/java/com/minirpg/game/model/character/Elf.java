@@ -1,5 +1,6 @@
-package com.minirpg.game.model;
+package com.minirpg.game.model.character;
 
+import com.minirpg.game.model.Stats;
 import com.minirpg.game.util.BattleSystem;
 
 /**

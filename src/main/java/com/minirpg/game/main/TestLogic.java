@@ -1,6 +1,6 @@
 package com.minirpg.game.main;
 
-import com.minirpg.game.model.Player;
+import com.minirpg.game.model.character.Player;
 import com.minirpg.game.util.Assets;
 
 public class TestLogic {

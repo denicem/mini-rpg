@@ -2,12 +2,16 @@ package com.minirpg.game.controller;
 
 import java.util.List;
 
+import com.minirpg.game.model.character.*;
+import com.minirpg.game.model.item.IronCharm;
+import com.minirpg.game.model.item.Item;
+import com.minirpg.game.model.item.Potion;
+import com.minirpg.game.model.item.StrengthPotion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
-import com.minirpg.game.model.*;
 import com.minirpg.game.util.*;
 
 public class CombatController {

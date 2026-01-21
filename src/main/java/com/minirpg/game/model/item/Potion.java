@@ -1,4 +1,7 @@
-package com.minirpg.game.model;
+package com.minirpg.game.model.item;
+
+import com.minirpg.game.model.character.Player;
+
 /**
  * Represents a Potion item in the MiniRPG game.
  * When used, it restores 20 HP to the player, without exceeding the maximum HP.
