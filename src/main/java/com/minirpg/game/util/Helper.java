@@ -2,6 +2,10 @@ package com.minirpg.game.util;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.control.Label;
+import javafx.util.Duration;
 
 import java.util.Objects;
 
@@ -33,4 +37,25 @@ public class Helper {
         pause.setOnFinished(event -> continuation.run());
         pause.play();
     }
+
+    public static Timeline animateText(Label label, String fullText) {
+        if (label == null || fullText == null) return null;
+
+        label.setText("");
+        final StringBuilder sb = new StringBuilder();
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(70), e -> {
+                    if (sb.length() < fullText.length()) {
+                        sb.append(fullText.charAt(sb.length()));
+                        label.setText(sb.toString());
+                    }
+                })
+        );
+
+        timeline.setCycleCount(fullText.length());
+        timeline.play();
+        return timeline;
+    }
+
 }

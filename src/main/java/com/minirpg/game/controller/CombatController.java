@@ -46,7 +46,14 @@ public class CombatController {
     }
 
     private void loadCombatScene() {
+        String charPath = GameSession.getCharacterImgPath();
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
+
+        if (charPath != null && charPath.contains("knight_girl")) {
+            playerImageView.setScaleX(-1);
+        } else {
+            playerImageView.setScaleX(1);
+        }
 
         if (enemy instanceof Dragon) {
             Helper.loadImage(backgroundView, Assets.BG_CASTLE_INSIDE);
@@ -117,6 +124,7 @@ public class CombatController {
         if (enemy.isAlive()) {
             if (firstNewline)
                 enemyLog += '\n';
+            shakeSprite(playerImageView);
             enemyLog += BattleSystem.performAttack(enemy, player);
         }
         return enemyLog;
@@ -136,6 +144,7 @@ public class CombatController {
 
         // Player's turn
         String playerAttackResult = BattleSystem.performAttack(player, enemy);
+        shakeSprite(enemyImageView);
         turnLog.append(playerAttackResult).append('\n');
         combatLog.setText(turnLog.toString());
         System.out.println(playerAttackResult);
@@ -235,4 +244,15 @@ public class CombatController {
             checkBattleStatus();
         }
     }
+
+    private void shakeSprite(ImageView sprite) {
+        javafx.animation.TranslateTransition shake = new javafx.animation.TranslateTransition(javafx.util.Duration.millis(50), sprite);
+        shake.setFromX(0);
+        shake.setToX(10);
+        shake.setCycleCount(4);
+        shake.setAutoReverse(true);
+        shake.setOnFinished(e -> sprite.setTranslateX(0));
+        shake.play();
+    }
+
 }

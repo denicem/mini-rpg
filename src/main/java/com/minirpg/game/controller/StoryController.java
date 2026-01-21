@@ -1,6 +1,8 @@
 package com.minirpg.game.controller;
 
 import com.minirpg.game.util.*;
+import javafx.animation.Animation;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,10 +19,19 @@ public class StoryController {
     private final StoryManager sm = new StoryManager();
     private String[] chunks;
     private int chunkIndex = 0;
+    private Timeline textAnimation;
 
     @FXML
     public void initialize() {
         Helper.logCall(this);
+
+        //Knight Girl inverted
+        String charPath = GameSession.getCharacterImgPath();
+        Helper.loadImage(playerImageView, charPath);
+
+        if (charPath != null && charPath.contains("knight_girl.png")) {
+            playerImageView.setScaleX(-1);
+        }
 
         System.out.printf("ACT %d: ", GameSession.getCurrentAct());
         this.exitButton.managedProperty().bind(this.exitButton.visibleProperty());
@@ -38,7 +49,7 @@ public class StoryController {
         // Hintergrund basierend auf Akt setzen
         Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
 
-        if (act == StoryManager.ACT_4) {
+        if (act == StoryManager.ACT_4 || act == StoryManager.ACT_5) {
             npcImageView.setVisible(true);
             Helper.loadImage(npcImageView, Assets.CH_PRINCESS);
         } else {
@@ -49,7 +60,7 @@ public class StoryController {
     }
 
     private void refreshUI() {
-        storyText.setText(chunks[chunkIndex]);
+        this.textAnimation = Helper.animateText(storyText, chunks[chunkIndex]);
         int act = GameSession.getCurrentAct();
         boolean isLastChunk = (chunkIndex == chunks.length - 1);
 
@@ -72,6 +83,12 @@ public class StoryController {
 
     @FXML
     protected void onContinueButtonClick() {
+       if (textAnimation != null && textAnimation.getStatus() == Animation.Status.RUNNING) {
+           textAnimation.stop();
+           storyText.setText(chunks[chunkIndex]);
+           return;
+       }
+
         if (chunkIndex < chunks.length - 1) {
             chunkIndex++;
             refreshUI();
