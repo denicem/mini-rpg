@@ -25,18 +25,13 @@ public class EndScreenController {
         StoryManager.Ending ending = GameSession.getFinalEnding();
         if (ending == null) return;
 
-        // Prüfen, ob weiblicher Ritter gewählt wurde
-        boolean isGirl = "knight_girl".equals(GameSession.getSelectedCharacterType());
+        boolean isGirl = GameSession.getSelectedCharacterType().contains("knight_girl");
 
-        // 1. Hintergrund aus StoryManager setzen
-        // (Ersetzt die manuelle Logik für BG_AT_HOME bei COWARD)
         Helper.loadImage(backgroundView, storyManager.getBackgroundForEnding(ending));
 
-        // 2. Texte aus StoryManager setzen
         titleLabel.setText(StoryManager.getEndingTitle(ending));
         Helper.animateText(subtitleLabel, storyManager.getEndingText(ending));
 
-        // 3. Charakterbild setzen (Logik bleibt inline wie gewünscht)
         switch (ending) {
             case GOOD -> {
                 Helper.loadImage(characterView, isGirl ? Assets.CH_KNIGHT_GIRL : Assets.CH_KNIGHT_WITH_SWORD_AND_SHIELD);

@@ -49,12 +49,6 @@ public class CombatController {
         String charPath = GameSession.getCharacterImgPath();
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
 
-        if (charPath != null && charPath.contains("knight_girl")) {
-            playerImageView.setScaleX(-1);
-        } else {
-            playerImageView.setScaleX(1);
-        }
-
         if (enemy instanceof Dragon) {
             Helper.loadImage(backgroundView, Assets.BG_CASTLE_INSIDE);
             Helper.loadImage(enemyImageView, Assets.CH_DRAGON);

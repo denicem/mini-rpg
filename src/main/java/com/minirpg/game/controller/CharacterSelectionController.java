@@ -39,7 +39,7 @@ public class CharacterSelectionController {
 
         // GameSession starten und Player erstellen
         GameSession.startNewGame("Lady Lala");
-        GameSession.setSelectedCharacterType("knight_girl"); // Typ als "knight_girl" speichern
+        GameSession.setSelectedCharacterType("knight_girl_inverted"); // Typ als "knight_girl" speichern
         ViewManager.switchTo("story-view.fxml");
     }
 

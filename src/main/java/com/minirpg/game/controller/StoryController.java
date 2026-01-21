@@ -27,9 +27,6 @@ public class StoryController {
 
         String charPath = GameSession.getCharacterImgPath();
         Helper.loadImage(playerImageView, charPath);
-        if (charPath != null && charPath.contains("knight_girl.png")) { // Knight Girl inverted
-            playerImageView.setScaleX(-1);
-        }
 
         System.out.printf("ACT %d.\n", GameSession.getCurrentAct());
         this.exitButton.managedProperty().bind(this.exitButton.visibleProperty());
