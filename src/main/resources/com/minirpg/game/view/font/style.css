@@ -16,6 +16,7 @@
 
 .button {
 	-fx-font-family: "Press Start 2P";
+	-fx-text-fill: white;
 	-fx-font-size: 14px;
 	-fx-background-color: transparent;
 	-fx-padding: 0;

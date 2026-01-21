@@ -1,18 +1,15 @@
 package com.minirpg.game.controller;
 
+import com.minirpg.game.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
-import com.minirpg.game.util.GameSession;
-import com.minirpg.game.util.Helper;
-import com.minirpg.game.util.StoryManager;
-import com.minirpg.game.util.ViewManager;
-
 public class StoryController {
     @FXML private ImageView gameSceneView;
     @FXML private ImageView playerImageView;
+    @FXML private ImageView npcImageView;
     @FXML private Label storyText;
     @FXML private Button continueButton;
     @FXML private Button exitButton;
@@ -37,6 +34,17 @@ public class StoryController {
 
         this.chunks = sm.getStoryChunks(act);
         this.chunkIndex = 0;
+
+        // Hintergrund basierend auf Akt setzen
+        Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
+
+        if (act == StoryManager.ACT_4) {
+            npcImageView.setVisible(true);
+            Helper.loadImage(npcImageView, Assets.CH_PRINCESS);
+        } else {
+            npcImageView.setVisible(false);
+        }
+
         refreshUI();
     }
 
