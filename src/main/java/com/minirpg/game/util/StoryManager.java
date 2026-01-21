@@ -139,6 +139,15 @@ public class StoryManager {
         return intro;
     }
 
+    public static String getEndingTitle(Ending type) {
+        return switch (type) {
+            case GOOD -> "VICTORY!";
+            case BAD -> "GAME OVER.";
+            case COWARD -> "RETIRED.";
+            case RETREAT -> "ESCAPED!";
+        };
+    }
+
     public String getEndingText(Ending type) {
         return switch (type) {
             case GOOD -> "Against all common sense, you actually survived.\nThe dragon falls by your hands.\n\nThe Royal Knight Order welcomes you as a full-fledged knight.";
