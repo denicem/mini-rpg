@@ -1,53 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane stylesheets="@font/style.css" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.minirpg.game.controller.CombatController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.minirpg.game.controller.CombatController"
+           prefHeight="720.0"
+           prefWidth="1280.0"
+           stylesheets="@font/style.css">
+
     <children>
-        <ImageView fx:id="backgroundView" fitHeight="720.0" fitWidth="1280.0" />
+        <ImageView fx:id="backgroundView"
+                   fitHeight="720.0"
+                   fitWidth="1280.0" />
 
         <VBox alignment="CENTER" spacing="50.0">
             <children>
+
                 <HBox alignment="CENTER" spacing="200.0">
                     <children>
+
                         <VBox alignment="CENTER" spacing="5.0">
                             <children>
-                                <Label fx:id="playerHpLabel" style="-fx-font-size: 24px; -fx-text-fill: lime; -fx-font-weight: bold;" text="HP: 100/100" />
-                                <Label fx:id="playerAtkDefLabel" style="-fx-font-size: 16px; -fx-text-fill: white;" text="ATK: 0 | DEF: 0" />
-                                <ImageView fx:id="playerImageView" fitHeight="350.0" preserveRatio="true" />
+                                <Label fx:id="playerHpLabel"
+                                       style="-fx-font-size: 24px; -fx-text-fill: lime; -fx-font-weight: bold;"
+                                       text="HP: 100/100" />
+                                <Label fx:id="playerAtkDefLabel"
+                                       style="-fx-font-size: 16px;"
+                                       text="ATK: 0 | DEF: 0" />
+                                <ImageView fx:id="playerImageView"
+                                           fitHeight="350.0"
+                                           preserveRatio="true" />
                             </children>
                         </VBox>
 
                         <VBox alignment="CENTER" spacing="5.0">
                             <children>
-                                <Label fx:id="enemyHpLabel" style="-fx-font-size: 24px; -fx-text-fill: red; -fx-font-weight: bold;" text="HP: 50/50" />
-                                <Label fx:id="enemyAtkDefLabel" style="-fx-font-size: 16px; -fx-text-fill: white;" text="ATK: 0 | DEF: 0" />
-                                <ImageView fx:id="enemyImageView" fitHeight="350.0" preserveRatio="true" />
+                                <Label fx:id="enemyHpLabel"
+                                       style="-fx-font-size: 24px; -fx-text-fill: red; -fx-font-weight: bold;"
+                                       text="HP: 50/50" />
+                                <Label fx:id="enemyAtkDefLabel"
+                                       style="-fx-font-size: 16px;"
+                                       text="ATK: 0 | DEF: 0" />
+                                <ImageView fx:id="enemyImageView"
+                                           fitHeight="350.0"
+                                           preserveRatio="true" />
                             </children>
                         </VBox>
+
                     </children>
                 </HBox>
 
                 <VBox alignment="CENTER" spacing="20.0">
                     <children>
-                        <Label fx:id="combatLog" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: rgba(0,0,0,0.8); -fx-text-fill: white; -fx-font-size: 18px; -fx-padding: 15;" text="Combat log starts here..." wrapText="true" />
+
+                        <Label fx:id="combatLog"
+                               prefWidth="800.0"
+                               style="-fx-background-color: rgba(0,0,0,0.8); -fx-font-size: 18px; -fx-padding: 15;"
+                               text="Combat log starts here..."
+                               wrapText="true" />
+
                         <HBox alignment="CENTER" spacing="20.0">
                             <children>
+
                                 <VBox alignment="CENTER" spacing="10.0">
                                     <children>
-                                        <Button fx:id="attackButton" onAction="#onAttackButtonClick"  style="-fx-font-size: 18px; -fx-base: #8B0000; -fx-text-fill: white;" text="ATTACK!" />
-                                        <Button fx:id="doNothingButton" onAction="#onDoNothingButtonClick"  style="-fx-font-size: 18px; -fx-base: grey; -fx-text-fill: white;" text="DO NOTHING..." />
+                                        <Button fx:id="attackButton"
+                                                onAction="#onAttackButtonClick"
+                                                style="-fx-font-size: 18px; -fx-base: #8B0000;"
+                                                text="ATTACK!" />
+                                        <Button fx:id="doNothingButton"
+                                                onAction="#onDoNothingButtonClick"
+                                                style="-fx-font-size: 18px; -fx-base: grey;"
+                                                text="DO NOTHING..." />
                                     </children>
                                 </VBox>
 
                                 <VBox alignment="CENTER" spacing="10.0">
                                     <children>
-                                        <Button fx:id="potionButton" onAction="#onPotionButtonClick"  style="-fx-font-size: 18px; -fx-base: #006400; -fx-text-fill: white;" text="ITEMS" />
-                                        <Button fx:id="fleeButton" onAction="#onFleeButtonClick"  style="-fx-font-size: 18px; -fx-base: #2F4F4F; -fx-text-fill: white;" text="FLEE" />
+                                        <Button fx:id="potionButton"
+                                                onAction="#onPotionButtonClick"
+                                                style="-fx-font-size: 18px; -fx-base: #006400;"
+                                                text="ITEMS" />
+                                        <Button fx:id="fleeButton"
+                                                onAction="#onFleeButtonClick"
+                                                style="-fx-font-size: 18px; -fx-base: #2F4F4F;"
+                                                text="FLEE" />
                                     </children>
                                 </VBox>
+
                             </children>
                         </HBox>
                     </children>

@@ -60,19 +60,18 @@ public class StoryManager {
 
     public String getButtonText(int act, int option) {
         switch (act) {
-
             case ACT_1:
                 return (option == 1) ? "Investigate the Scream" : (option == 2) ? "Run for your life" : "";
             case ACT_2:
-                return (option == 1) ? "Fight!" : (option == 2) ? "Try to talk" : (option == 3) ? "Run for your life" : "";
+                return (option == 1) ? "Fight!" : (option == 2) ? "Run for your life" : (option == 3) ? "Try to talk" : "";
             case ACT_3:
-                return (option == 1) ? "Follow the princess inside" : (option == 2) ? "Run for your life" : "";
+                return (option == 1) ? "Continue to train" : (option == 2) ? "I'm ready" : "";
             case ACT_4:
-                return (option == 1) ? "Continue" : "";
+                return (option == 1) ? "Go Inside" : (option == 2) ? "Run for your life" : "";
             case ACT_5:
-                return (option == 1) ? "Restart" : (option == 2) ? "Quit" : "";
+                return (option == 1) ? "Fight the Dragon" : "";
             default:
-                return "";
+                return "Continue";
         }
     }
 

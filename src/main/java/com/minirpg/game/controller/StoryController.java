@@ -1,14 +1,14 @@
 package com.minirpg.game.controller;
 
-import com.minirpg.game.model.Dragon;
-import com.minirpg.game.model.Elf;
-import com.minirpg.game.model.Enemy;
-import com.minirpg.game.model.Mage;
-import com.minirpg.game.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+
+import com.minirpg.game.util.GameSession;
+import com.minirpg.game.util.Helper;
+import com.minirpg.game.util.StoryManager;
+import com.minirpg.game.util.ViewManager;
 
 public class StoryController {
     @FXML private ImageView gameSceneView;
@@ -17,63 +17,47 @@ public class StoryController {
     @FXML private Button continueButton;
     @FXML private Button exitButton;
 
-    private StoryManager sm = new StoryManager();
+    private final StoryManager sm = new StoryManager();
     private String[] chunks;
     private int chunkIndex = 0;
 
     @FXML
     public void initialize() {
+        Helper.logCall(this);
+
+        System.out.printf("ACT %d: ", GameSession.getCurrentAct());
+        this.exitButton.managedProperty().bind(this.exitButton.visibleProperty());
         Helper.loadImage(playerImageView, GameSession.getCharacterImgPath());
+
         loadAct(GameSession.getCurrentAct());
     }
 
     private void loadAct(int act) {
-        GameSession.setCurrentAct(act);
+        Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
+
         this.chunks = sm.getStoryChunks(act);
         this.chunkIndex = 0;
-
-        // Hintergrund basierend auf Akt setzen
-        Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
-        this.displayChunk();
+        refreshUI();
     }
 
-    private void displayChunk() {
+    private void refreshUI() {
         storyText.setText(chunks[chunkIndex]);
-        updateButtons();
-    }
-
-    private void updateButtons() {
         int act = GameSession.getCurrentAct();
         boolean isLastChunk = (chunkIndex == chunks.length - 1);
 
         if (!isLastChunk) {
-            // Während man durch Chunks blättert [cite: 19, 21]
+            // Während man durch Chunks blättert
             continueButton.setText("Continue");
             exitButton.setVisible(false);
         } else {
-            // Logik für den Abschluss eines Aktes laut Story.txt [cite: 18-34]
+            // Logik für den Abschluss eines Aktes laut Story.txt
             exitButton.setVisible(true);
             switch (act) {
-                case StoryManager.ACT_1 -> {
-                    continueButton.setText("Continue");
-                    exitButton.setText("Flee");
-                }
-                case StoryManager.ACT_2 -> {
-                    continueButton.setText("Fight");
-                    exitButton.setText("Flee");
-                }
-                case StoryManager.ACT_3 -> { // Training Loop Entscheidung [cite: 26]
-                    continueButton.setText("Yes");
-                    exitButton.setText("No");
-                }
-                case StoryManager.ACT_4 -> {
-                    continueButton.setText("Continue");
-                    exitButton.setText("Flee");
-                }
-                case StoryManager.ACT_5 -> {
-                    continueButton.setText("Fight");
-                    exitButton.setVisible(false); // Finale: Nur Kämpfen [cite: 32]
-                }
+                case StoryManager.ACT_1 -> { continueButton.setText(sm.getButtonText(act, 1)); exitButton.setText(sm.getButtonText(act, 2)); }
+                case StoryManager.ACT_2 -> { continueButton.setText(sm.getButtonText(act, 1)); exitButton.setText(sm.getButtonText(act, 2)); }
+                case StoryManager.ACT_3 -> { continueButton.setText(sm.getButtonText(act, 1)); exitButton.setText(sm.getButtonText(act, 2)); }
+                case StoryManager.ACT_4 -> { continueButton.setText(sm.getButtonText(act, 1)); exitButton.setText(sm.getButtonText(act, 2)); }
+                case StoryManager.ACT_5 -> { continueButton.setText(sm.getButtonText(act, 1)); exitButton.setVisible(false); }
             }
         }
     }
@@ -82,7 +66,7 @@ public class StoryController {
     protected void onContinueButtonClick() {
         if (chunkIndex < chunks.length - 1) {
             chunkIndex++;
-            displayChunk();
+            refreshUI();
         } else {
             handleActTransition();
         }
@@ -91,41 +75,30 @@ public class StoryController {
     private void handleActTransition() {
         int act = GameSession.getCurrentAct();
         switch (act) {
-            case StoryManager.ACT_1 -> loadAct(StoryManager.ACT_2);
-            case StoryManager.ACT_2 -> {
-                GameSession.setCurrentEnemy(new Elf());
+            case StoryManager.ACT_1, StoryManager.ACT_4 -> {
+                GameSession.nextAct();
+                loadAct(GameSession.getCurrentAct());
+            }
+            case StoryManager.ACT_2, StoryManager.ACT_3, StoryManager.ACT_5 -> {
+                if (act == StoryManager.ACT_2) GameSession.nextAct();
                 ViewManager.switchTo("combat-view.fxml");
             }
-            case StoryManager.ACT_3 -> {
-                Enemy enemy = (Math.random() > 0.5 ? new Mage() : new Elf());
-                GameSession.setCurrentEnemy(enemy);
-                ViewManager.switchTo("combat-view.fxml");
-            }
-            case StoryManager.ACT_4 -> loadAct(StoryManager.ACT_5);
-            case StoryManager.ACT_5 -> {
-                GameSession.setCurrentEnemy(new Dragon());
-                ViewManager.switchTo("combat-view.fxml");
-            }
+
         }
     }
 
     @FXML
     protected void onExitButtonClick() {
-        int act = GameSession.getCurrentAct();
-        if (act == StoryManager.ACT_3) {
-            // "No" gewählt -> Weiter zum Schloss
-            loadAct(StoryManager.ACT_4);
+        if (GameSession.getCurrentAct() == StoryManager.ACT_3) {
+            GameSession.nextAct();
+            loadAct(GameSession.getCurrentAct());
         } else {
-            // Alle anderen Flee-Optionen führen zum Coward Ending
             showEnding(StoryManager.Ending.COWARD);
         }
     }
 
     private void showEnding(StoryManager.Ending ending) {
-        // 1. Ende in der Session speichern
         GameSession.setFinalEnding(ending);
-
-        // 2. Zur Endscreen-View wechseln
         ViewManager.switchTo("end-screen-view.fxml");
     }
 }

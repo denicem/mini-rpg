@@ -1,23 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<StackPane stylesheets="@font/style.css" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.minirpg.game.controller.StoryController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.12"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.minirpg.game.controller.StoryController"
+           prefHeight="720.0"
+           prefWidth="1280.0"
+           stylesheets="@font/style.css">
+
     <children>
-        <ImageView fx:id="gameSceneView" fitHeight="720.0" fitWidth="1280.0" pickOnBounds="true" preserveRatio="false" />
-        <ImageView fx:id="playerImageView" fitHeight="450.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER" />
+        <ImageView fx:id="gameSceneView"
+                   fitHeight="720.0"
+                   fitWidth="1280.0"
+                   pickOnBounds="true"
+                   preserveRatio="false" />
 
-        <VBox alignment="BOTTOM_CENTER" spacing="20.0" style="-fx-padding: 40;">
+        <ImageView fx:id="playerImageView"
+                   fitHeight="450.0"
+                   pickOnBounds="true"
+                   preserveRatio="true"
+                   StackPane.alignment="BOTTOM_CENTER" />
+
+        <VBox alignment="BOTTOM_CENTER" spacing="20.0">
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
             <children>
-                <Label fx:id="storyText" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-text-fill: white; -fx-font-size: 20px; -fx-padding: 20;" text="..." wrapText="true" />
+
+                <Label fx:id="storyText"
+                       prefWidth="900.0"
+                       style="-fx-background-color: rgba(0,0,0,0.7); -fx-font-size: 20px; -fx-padding: 20;"
+                       text="..."
+                       wrapText="true" />
+
                 <HBox alignment="CENTER" spacing="40.0">
                     <children>
-                        <Button fx:id="continueButton" onAction="#onContinueButtonClick" prefWidth="200.0" style="-fx-font-size: 18px;" text="Continue" />
-                        <Button fx:id="exitButton" onAction="#onExitButtonClick" prefWidth="200.0" style="-fx-font-size: 18px;" text="Exit" />
+                        <Button fx:id="continueButton"
+                                onAction="#onContinueButtonClick"
+                                prefWidth="200.0"
+                                style="-fx-font-size: 18px;"
+                                text="Continue" />
+
+                        <Button fx:id="exitButton"
+                                onAction="#onExitButtonClick"
+                                prefWidth="200.0"
+                                style="-fx-font-size: 18px;"
+                                text="Exit" />
                     </children>
                 </HBox>
+
             </children>
         </VBox>
     </children>
