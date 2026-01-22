@@ -10,7 +10,7 @@ import com.minirpg.game.util.BattleSystem;
 
 public class  Dragon extends Enemy{
     public Dragon(){
-        super("Dragon", 100, new Stats(18,12));
+        super("Dragon", 100, new Stats(13,7));
     }
 
 

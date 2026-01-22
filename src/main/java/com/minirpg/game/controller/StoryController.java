@@ -43,7 +43,7 @@ public class StoryController {
         this.chunkIndex = 0;
 
         // Hintergrund basierend auf Akt setzen
-        Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
+        //Helper.loadImage(gameSceneView, sm.getBackgroundForAct(act));
 
         if (act == StoryManager.ACT_4 || act == StoryManager.ACT_5) {
             npcImageView.setVisible(true);
@@ -56,6 +56,10 @@ public class StoryController {
     }
 
     private void refreshUI() {
+        if (textAnimation != null) {
+            textAnimation.stop();
+        }
+
         this.textAnimation = Helper.animateText(storyText, chunks[chunkIndex]);
         int act = GameSession.getCurrentAct();
         boolean isLastChunk = (chunkIndex == chunks.length - 1);

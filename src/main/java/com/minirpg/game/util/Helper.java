@@ -29,6 +29,7 @@ public class Helper {
 
     /**
      * Delays the execution of a specific action without freezing the game UI.
+     *
      * @param millis       The wait time in milliseconds.
      * @param continuation The code/action to run once the time has passed.
      */
@@ -44,18 +45,23 @@ public class Helper {
         label.setText("");
         final StringBuilder sb = new StringBuilder();
 
+        final int charsPerTick = 1;
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(70), e -> {
-                    if (sb.length() < fullText.length()) {
+                new KeyFrame(Duration.millis(50), e -> {
+                    for (int i = 0; i < charsPerTick && sb.length() < fullText.length(); i++) {
                         sb.append(fullText.charAt(sb.length()));
-                        label.setText(sb.toString());
                     }
+                    label.setText(sb.toString());
+
+                    // (sb.length() < fullText.length()) {
+                    //    sb.append(fullText.charAt(sb.length()));
+                    //    label.setText(sb.toString());
+                    //}
                 })
         );
 
-        timeline.setCycleCount(fullText.length());
+        timeline.setCycleCount((int) Math.ceil((double) fullText.length() / charsPerTick));
         timeline.play();
         return timeline;
     }
-
 }

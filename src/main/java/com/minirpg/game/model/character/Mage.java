@@ -11,7 +11,7 @@ import com.minirpg.game.util.BattleSystem;
 
 public class Mage extends Enemy{
     public Mage(){
-        super("Mage", 50, new Stats(10,8));
+        super("Mage", 40, new Stats(9,4));
     }
   //Attacks a target character using the battle system.
     @Override
