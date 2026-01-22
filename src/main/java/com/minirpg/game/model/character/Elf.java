@@ -10,7 +10,7 @@ import com.minirpg.game.util.BattleSystem;
 
 public class Elf extends Enemy{
     public Elf(){
-        super("Elf", 20, new Stats(2,1));
+        super("Elf", 30, new Stats(7,7));
     }
 
     // Attacks a target character using the battle system.
